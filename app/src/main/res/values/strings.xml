@@ -1,0 +1,34 @@
+<resources>
+    <string name="app_name">Charity</string>
+    <string name="desc">picture</string>
+    <string-array name="countries_array">
+        <item>Россия</item>
+        <item>Армения</item>
+        <item>Украина</item>
+        <item>Беларуссия</item>
+        <item>Казахстан</item>
+        <item>Грузия</item>
+        <item>Узбекистан</item>
+    </string-array>
+
+    <string name="title_activity_setting">SettingActivity</string>
+    <string name="Name">Введите имя</string>
+    <string name="Lastname">Введите фамилию</string>
+    <string name="Age">Введите возраст</string>
+    <string name="Region">Выберите страну</string>
+    <string name="SaveData">Сохранить данные</string>
+    <string name="CreatingProfile">Создание профиля:</string>
+    <string name="title_activity_annoucment">AnnoucmentActivity</string>
+    <string name="title_activity_annoucments">AnnoucmentsActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="EnterLogin">Введите логин</string>
+    <string name="ImaginePassword">Придумайте пароль</string>
+    <string name="EnterPassword">Введите пароль</string>
+    <string name="Enter">ВОЙТИ</string>
+    <string name="OR">ИЛИ</string>
+    <string name="CreateProf">СОЗАДТЬ ПРОФИЛЬ</string>
+    <string name="MyProfile">Мой профиль:</string>
+    <string name="Change">Редактировать</string>
+</resources>
