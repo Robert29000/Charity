@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "13644625793",
+    "firebase_url": "https://charity-af129.firebaseio.com",
+    "project_id": "charity-af129",
+    "storage_bucket": "charity-af129.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:13644625793:android:6a4913caaac4165c",
+        "android_client_info": {
+          "package_name": "com.example.melikyan.charity"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "13644625793-5q24a1umi8dj1s4athqfq1gkooh8f0jq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyANfK74LTOJK1IjcqTy6RGUvaxULGQgCxo"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

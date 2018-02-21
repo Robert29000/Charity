@@ -28,7 +28,19 @@
     <string name="EnterPassword">Введите пароль</string>
     <string name="Enter">ВОЙТИ</string>
     <string name="OR">ИЛИ</string>
-    <string name="CreateProf">СОЗАДТЬ ПРОФИЛЬ</string>
+    <string name="CreateProf">СОЗДАТЬ ПРОФИЛЬ</string>
     <string name="MyProfile">Мой профиль:</string>
     <string name="Change">Редактировать</string>
+    <string name="EnterEMail">Введите название почты</string>
+    <string name="EnterEMAIL">Введите e-mail</string>
+    <string name="EnterName">Введите ваше имя</string>
+    <string name="EnterLastName">Введите вашу фамилию</string>
+    <string name="EnterRegion">Введите регион</string>
+    <string name="EnterAge">Введите возраст</string>
+    <string name="title_activity_application">Application</string>
+    <string name="tab_text_1">Tab 1</string>
+    <string name="tab_text_2">Tab 2</string>
+    <string name="tab_text_3">Tab 3</string>
+    <string name="action_settings">Settings</string>
+    <string name="section_format">Hello World from section: %1$d</string>
 </resources>

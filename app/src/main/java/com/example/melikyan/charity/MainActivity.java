@@ -9,38 +9,35 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
-public class MainActivity extends AppCompatActivity {
+import com.firebase.ui.auth.AuthUI;
+import com.google.android.gms.auth.api.Auth;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
+public class MainActivity extends AppCompatActivity {
+    private static final int RC_SIGN_IN = 123;
+    protected static FirebaseAuth mAuth;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mAuth=FirebaseAuth.getInstance();
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                SQLiteDatabase ann=getBaseContext().openOrCreateDatabase("charity.db",MODE_PRIVATE,null);
-                ann.execSQL("create table if not exists annouc (name TEXT,images TEXT,money_neede INTEGER,money_come INTEGER);");
-                ann.execSQL("create table if not exists user (Login TEXT,Name TEXT,Lastname TEXT,Region TEXT,Age TEXT);");
-                Cursor query=ann.rawQuery("SELECT * FROM user;",null);
-                if(!query.moveToNext()){
-                    Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                FirebaseUser user=mAuth.getCurrentUser();
+                if(user==null){
+                    Intent intent=new Intent(MainActivity.this,LoginActivity.class);
                     startActivity(intent);
-                    query.close();
-                    ann.close();
+                    finish();
                 }else{
-                    Intent intent = new Intent(MainActivity.this, AnnoucmentsActivity.class);
+                    Intent intent=new Intent(MainActivity.this,ApplicationActivity.class);
                     startActivity(intent);
-                    query.close();
-                    ann.close();
+                    finish();
                 }
             }
         },3000);
-
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        finish();
-    }
+
 }
