@@ -58,6 +58,7 @@ public class RegisterActivity extends AppCompatActivity {
                     if (task.isComplete()) {
                         FirebaseUser user=mAuth.getCurrentUser();
                         mDataBase = FirebaseDatabase.getInstance().getReference();
+                        mDataBase.child("Users").child(user.getUid()).child("email").setValue(mail);
                         mDataBase.child("Users").child(user.getUid()).child("name").setValue(name.getText().toString());
                         mDataBase.child("Users").child(user.getUid()).child("lastname").setValue(lastname.getText().toString());
                         mDataBase.child("Users").child(user.getUid()).child("region").setValue(region.getText().toString());

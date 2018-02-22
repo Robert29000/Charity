@@ -10,6 +10,12 @@
         <item>Грузия</item>
         <item>Узбекистан</item>
     </string-array>
+    <string-array name="domains">
+        <item>Здравохранение</item>
+        <item>Компания</item>
+        <item>Социальная акция</item>
+    </string-array>
+
 
     <string name="title_activity_setting">SettingActivity</string>
     <string name="Name">Введите имя</string>
@@ -43,4 +49,8 @@
     <string name="tab_text_3">Tab 3</string>
     <string name="action_settings">Settings</string>
     <string name="section_format">Hello World from section: %1$d</string>
+    <string name="InvalidNameAnnouc">Напишите название объявления</string>
+    <string name="ChooseDomain">Выберете вид объявления</string>
+    <string name="WriteAnnotation">Напишите в подробностях о вашей проблеме,целях</string>
+    <string name="Next">Дальше</string>
 </resources>
