@@ -29,6 +29,8 @@
         app:layout_constraintTop_toBottomOf="@+id/toolbar"
         android:background="#FF0000"
         app:tabSelectedTextColor="#FFFFFF"
+        app:tabIndicatorColor="#FFFFFF"
+        app:tabIndicatorHeight="4dp"
         >
             <android.support.design.widget.TabItem
                 android:layout_width="wrap_content"
