@@ -1,4 +1,4 @@
-package com.example.melikyan.charity;
+package com.example.melikyan.charity.MainApplication;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -7,16 +7,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.melikyan.charity.R;
+
 /**
  * Created by melikyan on 20.02.2018.
  */
 
-public class MyAnnoucFragmnet extends Fragment {
+public class MyProfileFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view=inflater.inflate(R.layout.myannoucments,container,false);
-        return view;
+        View view=inflater.inflate(R.layout.profile,container,false);
 
+        return view;
     }
 }

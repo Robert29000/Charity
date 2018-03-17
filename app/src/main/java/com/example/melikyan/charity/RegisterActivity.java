@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 import android.support.v7.widget.Toolbar;
 
+import com.example.melikyan.charity.MainApplication.ApplicationActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -63,8 +64,10 @@ public class RegisterActivity extends AppCompatActivity {
                         mDataBase.child("Users").child(user.getUid()).child("lastname").setValue(lastname.getText().toString());
                         mDataBase.child("Users").child(user.getUid()).child("region").setValue(region.getText().toString());
                         mDataBase.child("Users").child(user.getUid()).child("age").setValue(age.getText().toString());
+                        mDataBase.child("Users").child(user.getUid()).child("numberOfAnnouc").setValue(0);
                         Intent intent=new Intent(RegisterActivity.this,ApplicationActivity.class);
                         startActivity(intent);
+                        finish();
                     } else
                         new Toast(RegisterActivity.this).makeText(RegisterActivity.this, "Почтовый адресс уже используется", Toast.LENGTH_SHORT).show();
                 }

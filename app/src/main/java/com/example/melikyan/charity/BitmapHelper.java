@@ -11,7 +11,7 @@ import java.io.IOException;
  */
 
 public class BitmapHelper {
-    protected static Bitmap modifyOrientation(Bitmap bitmap, String image_absolute_path)  {
+    public static Bitmap modifyOrientation(Bitmap bitmap, String image_absolute_path)  {
         ExifInterface ei = null;
         try {
             ei = new ExifInterface(image_absolute_path);

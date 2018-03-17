@@ -1,4 +1,4 @@
-package com.example.melikyan.charity;
+package com.example.melikyan.charity.CreatingAnnoucment;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -16,14 +15,17 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
+import com.example.melikyan.charity.AnnotationInfo;
+import com.example.melikyan.charity.BitmapHelper;
+import com.example.melikyan.charity.R;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 
 import static com.example.melikyan.charity.R.id.toolbar;
 
@@ -153,7 +155,7 @@ public class AddingAnnoucment extends AppCompatActivity implements View.OnLongCl
             bmOption.inJustDecodeBounds = false;
             bmOption.inSampleSize = scaleFactor;
             Bitmap newbitmap = BitmapFactory.decodeFile(imagePath, bmOption);
-            newbitmap=BitmapHelper.modifyOrientation(newbitmap,imagePath);
+            newbitmap= BitmapHelper.modifyOrientation(newbitmap,imagePath);
             image.setBackground(null);
             image.setImageBitmap(newbitmap);
             try {
@@ -189,13 +191,39 @@ public class AddingAnnoucment extends AppCompatActivity implements View.OnLongCl
 
 
     public void Continue(View view) {
-
+        for(int i=0;i<3;i++){
+            if(BitmapFactory.decodeFile(paths[i])!=null){
+                AnnotationInfo.bits.add(files[i]);
+            }else{
+                File f=new File(paths[i]);
+                boolean deleted=f.delete();
+            }
+        }
+        EditText name=findViewById(R.id.invalidName);
+        EditText domain=findViewById(R.id.chooseDomain);
+        if(name.getText().toString().equals("") || domain.getText().toString().equals("")){
+            new Toast(this).makeText(this,"Заполните все поля",Toast.LENGTH_LONG).show();
+        }else {
+            Intent intent = new Intent(this, MakingAnnotation.class);
+            startActivity(intent);
+        }
     }
 
     private boolean hasDrawable;
     @Override
     public boolean onLongClick(View v) {
         final ImageView image=(ImageView)v;
+        switch (v.getId()) {
+            case R.id.imageView1:
+                chooseView = 0;
+                break;
+            case R.id.imageView2:
+                chooseView = 1;
+                break;
+            case R.id.imageView3:
+                chooseView = 2;
+                break;
+        }
         if(hasDrawable) {
             final String[] actions = {"Переснять фото", "Выбрать другое фото", "Снять видео","Удалить фото"};
             AlertDialog.Builder dialog = new AlertDialog.Builder(this);
@@ -220,5 +248,14 @@ public class AddingAnnoucment extends AppCompatActivity implements View.OnLongCl
             return false;
         }
         else return false;
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        EditText nam=findViewById(R.id.invalidName);
+        AutoCompleteTextView dom=findViewById(R.id.chooseDomain);
+        AnnotationInfo.name=nam.getText().toString();
+        AnnotationInfo.domain=dom.getText().toString();
     }
 }

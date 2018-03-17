@@ -53,4 +53,7 @@
     <string name="ChooseDomain">Выберете вид объявления</string>
     <string name="WriteAnnotation">Напишите в подробностях о вашей проблеме,целях</string>
     <string name="Next">Дальше</string>
+    <string name="Continue">дальше</string>
+    <string name="MoneyNeeded">Введите необходимую сумму денег</string>
+    <string name="CreateAnnoc">Создать</string>
 </resources>

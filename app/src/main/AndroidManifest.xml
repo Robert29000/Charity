@@ -9,7 +9,7 @@
         android:name="android.hardware.camera"
         android:required="false" />
 
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGEE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
@@ -38,9 +38,14 @@
         </activity>
         <activity android:name=".LoginActivity" />
         <activity android:name=".RegisterActivity" />
-        <activity android:name=".ApplicationActivity" />
-        <activity android:name=".AddingAnnoucment" />
-        <activity android:name=".ShowFullSizeImage"></activity>
+        <activity android:name=".MainApplication.ApplicationActivity" />
+        <activity android:name=".CreatingAnnoucment.AddingAnnoucment" />
+        <activity android:name=".CreatingAnnoucment.ShowFullSizeImage" />
+        <activity
+            android:name=".CreatingAnnoucment.MakingAnnotation"
+            android:windowSoftInputMode="adjustPan" />
+        <activity android:name=".CreatingAnnoucment.finish_creating_annouc" />
+        <activity android:name=".MainApplication.InformationOfAnnoucment"></activity>
     </application>
 
 </manifest>

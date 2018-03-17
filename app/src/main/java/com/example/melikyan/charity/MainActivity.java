@@ -1,43 +1,88 @@
 package com.example.melikyan.charity;
 
+
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.os.Handler;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.firebase.ui.auth.AuthUI;
-import com.google.android.gms.auth.api.Auth;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.target.Target;
+import com.example.melikyan.charity.MainApplication.AnnoucmentFragment;
+import com.example.melikyan.charity.MainApplication.ApplicationActivity;
+import com.firebase.ui.storage.images.FirebaseImageLoader;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FileDownloadTask;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
+import java.io.File;
+import java.io.IOException;
+
 
 public class MainActivity extends AppCompatActivity {
-    private static final int RC_SIGN_IN = 123;
-    protected static FirebaseAuth mAuth;
+
+    StorageReference storage;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mAuth=FirebaseAuth.getInstance();
-        new Handler().postDelayed(new Runnable() {
+        Query myRef= FirebaseDatabase.getInstance().getReference().child("Annoucments").limitToFirst(10);
+        storage= FirebaseStorage.getInstance().getReference();
+        myRef.addValueEventListener(new ValueEventListener() {
             @Override
-            public void run() {
-                FirebaseUser user=mAuth.getCurrentUser();
-                if(user==null){
-                    Intent intent=new Intent(MainActivity.this,LoginActivity.class);
-                    startActivity(intent);
-                    finish();
-                }else{
-                    Intent intent=new Intent(MainActivity.this,ApplicationActivity.class);
-                    startActivity(intent);
-                    finish();
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot postData:dataSnapshot.getChildren()){
+                    AnnoucmentFragment.users.add(postData.getValue(UsersAnnotations.class));
+                    int counter=AnnoucmentFragment.users.size();
+                    AnnoucmentFragment.users.get(counter-1).uid=postData.getKey();
+                }
+                for(int i=0;i<AnnoucmentFragment.users.size();i++) {
+                    final int counter=i;
+                    StorageReference ref=storage.child("images/" + AnnoucmentFragment.users.get(i).uid + "/" + "image-0");
+                    try {
+                        final File localFile = File.createTempFile("Images", "jpg");
+                        ref.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                            @Override
+                            public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                                AnnoucmentFragment.users.get(counter).bitmap= BitmapFactory.decodeFile(localFile.getAbsolutePath());
+                                Log.d("EASY",localFile.getAbsolutePath()+"");
+                                if(counter==9){
+                                    Intent intent=new Intent(MainActivity.this,ApplicationActivity.class);
+                                    startActivity(intent);
+                                }
+                            }
+                        });
+                    }catch (IOException e){
+                        e.printStackTrace();
+                    }
                 }
             }
-        },3000);
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
     }
 
-
 }
+
+
+
