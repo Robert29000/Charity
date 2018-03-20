@@ -60,10 +60,10 @@ public class MainActivity extends AppCompatActivity {
                             @Override
                             public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
                                 AnnoucmentFragment.users.get(counter).bitmap= BitmapFactory.decodeFile(localFile.getAbsolutePath());
-                                Log.d("EASY",localFile.getAbsolutePath()+"");
-                                if(counter==9){
+                                if(counter==AnnoucmentFragment.users.size()-1){
                                     Intent intent=new Intent(MainActivity.this,ApplicationActivity.class);
                                     startActivity(intent);
+                                    finish();
                                 }
                             }
                         });

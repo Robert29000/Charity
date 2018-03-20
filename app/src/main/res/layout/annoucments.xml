@@ -11,7 +11,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#FF0000"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        app:layout_constraintEnd_toEndOf="parent"
         app:tabIndicatorColor="#FFFFFF"
         app:tabIndicatorHeight="4dp"
         app:tabSelectedTextColor="#FFFFFF">
@@ -32,18 +34,7 @@
             android:text="Profile" />
     </android.support.design.widget.TabLayout>
 
-    <Button
-        android:id="@+id/addannoucment"
-        android:layout_width="57dp"
-        android:layout_height="57dp"
-        android:layout_marginBottom="16dp"
-        android:layout_marginEnd="16dp"
-        android:background="@drawable/plus_icon"
-        android:elevation="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <ListView
+    <com.github.ksoichiro.android.observablescrollview.ObservableListView
         android:layout_marginTop="8dp"
         android:id="@+id/annouclists"
         android:layout_width="match_parent"
@@ -56,11 +47,6 @@
         android:dividerHeight="10dp"
         android:divider="@android:color/transparent"/>
 
-
-
-
-
-
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
@@ -68,6 +54,8 @@
         android:background="#FF0000"
         android:elevation="4dp"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:layout_scrollFlags="scroll|enterAlways"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
         app:titleTextColor="#FFFFFF" />
+
 </android.support.constraint.ConstraintLayout>
