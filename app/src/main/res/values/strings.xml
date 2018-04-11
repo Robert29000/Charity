@@ -56,4 +56,5 @@
     <string name="Continue">дальше</string>
     <string name="MoneyNeeded">Введите необходимую сумму денег</string>
     <string name="CreateAnnoc">Создать</string>
+    <string name="Donate">Пожертвовать</string>
 </resources>

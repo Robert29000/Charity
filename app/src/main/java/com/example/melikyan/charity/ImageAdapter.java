@@ -1,9 +1,7 @@
 package com.example.melikyan.charity;
 
-import android.content.Context;
 import android.graphics.Bitmap;
-import android.support.constraint.ConstraintLayout;
-import android.support.v4.view.PagerAdapter;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,32 +10,37 @@ import android.widget.ImageView;
 import java.util.ArrayList;
 
 /**
- * Created by melikyan on 10.03.2018.
+ * Created by melikyan on 08.04.2018.
  */
 
-public class ImageAdapter extends PagerAdapter {
-    private Context context;
-    private ArrayList<Bitmap> bits;
-    public ImageAdapter(Context context,ArrayList<Bitmap> objects){
-        this.context=context;
-        bits=objects;
+public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> {
+    ArrayList<Bitmap> bits;
+
+    public static class ViewHolder extends RecyclerView.ViewHolder{
+        public ImageView image;
+        public ViewHolder(View itemView) {
+            super(itemView);
+            image=itemView.findViewById(R.id.images);
+        }
     }
+    public ImageAdapter(ArrayList<Bitmap> bits){
+        this.bits=bits;
+    }
+
     @Override
-    public int getCount() {
+    public int getItemCount() {
         return bits.size();
     }
 
     @Override
-    public boolean isViewFromObject(View view, Object object) {
-        return view==object;
+    public void onBindViewHolder(ViewHolder holder, int position) {
+        holder.image.setImageBitmap(bits.get(position));
     }
 
     @Override
-    public Object instantiateItem(ViewGroup container, int position) {
-        View view= LayoutInflater.from(context).inflate(R.layout.imagefragment,null);
-        ImageView image=view.findViewById(R.id.image);
-        image.setImageBitmap(bits.get(position));
-        container.addView(view);
-        return view;
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View v= LayoutInflater.from(parent.getContext()).inflate(R.layout.image_recycle,parent,false);
+        ViewHolder vh=new ViewHolder(v);
+        return vh;
     }
 }

@@ -45,7 +45,7 @@
             android:name=".CreatingAnnoucment.MakingAnnotation"
             android:windowSoftInputMode="adjustPan" />
         <activity android:name=".CreatingAnnoucment.finish_creating_annouc" />
-        <activity android:name=".MainApplication.InformationOfAnnoucment"></activity>
+        <activity android:name=".MainApplication.InformationOfAnnoucment" />
     </application>
 
 </manifest>

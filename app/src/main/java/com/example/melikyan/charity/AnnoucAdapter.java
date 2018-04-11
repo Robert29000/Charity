@@ -3,6 +3,7 @@ package com.example.melikyan.charity;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,35 +12,66 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 
 /**
  * Created by melikyan on 16.03.2018.
  */
 
-public class AnnoucAdapter extends ArrayAdapter {
+public class AnnoucAdapter extends RecyclerView.Adapter<AnnoucAdapter.ViewHolder>{
     ArrayList<UsersAnnotations> users;
-    public AnnoucAdapter(@NonNull Context context, @NonNull ArrayList<UsersAnnotations> objects) {
-        super(context, R.layout.users_adapter,  objects);
-        users=objects;
+    private RecyclerViewClickListener mListener;
+
+    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        public TextView text,money;
+        public ImageView image;
+        public ProgressBar bar;
+        private RecyclerViewClickListener mListener;
+
+        public ViewHolder(View v,RecyclerViewClickListener listener) {
+            super(v);
+            text=v.findViewById(R.id.annoucname);
+            money=v.findViewById(R.id.money);
+            image=v.findViewById(R.id.firstimage);
+            bar=v.findViewById(R.id.moneyprogress);
+            mListener=listener;
+            v.setOnClickListener(this);
+        }
+
+
+        @Override
+        public void onClick(View v) {
+            mListener.OnClick(v,getAdapterPosition());
+        }
     }
 
-    @NonNull
-    @Override
-    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        UsersAnnotations user=users.get(position);
-        if(convertView==null)
-            convertView= LayoutInflater.from(getContext()).inflate(R.layout.users_adapter,null);
-        TextView text=convertView.findViewById(R.id.annoucname);
-        text.setText(user.name);
-        ProgressBar bar=convertView.findViewById(R.id.moneyprogress);
-        bar.setMax(user.moneyneeded);
-        bar.setProgress(user.moneyincome);
-        TextView money=convertView.findViewById(R.id.money);
-        money.setText(user.moneyincome+"/"+user.moneyneeded);
-        ImageView image=convertView.findViewById(R.id.firstimage);
-        image.setImageBitmap(user.bitmap);
-        image.setImageBitmap(user.bitmap);
-        return convertView;
+    public AnnoucAdapter(ArrayList<UsersAnnotations> users,RecyclerViewClickListener listener){
+        this.users=users;
+        this.mListener=listener;
     }
+
+    @Override
+    public AnnoucAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View v=LayoutInflater.from(parent.getContext()).inflate(R.layout.users_adapter,parent,false);
+        ViewHolder vh=new ViewHolder(v,mListener);
+        return vh;
+    }
+
+    @Override
+    public int getItemCount() {
+        return users.size();
+    }
+
+    @Override
+    public void onBindViewHolder(ViewHolder holder, int position) {
+        UsersAnnotations user=users.get(position);
+        holder.text.setText(user.name);
+        holder.bar.setMax(user.moneyneeded);
+        holder.bar.setProgress(user.moneyincome);
+        holder.money.setText(user.moneyincome+"/"+user.moneyneeded);
+        holder.image.setImageBitmap(user.bitmap);
+    }
+
 }

@@ -9,6 +9,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -113,29 +114,9 @@ public class AddingAnnoucment extends AppCompatActivity implements View.OnLongCl
             case 2:image=findViewById(R.id.imageView3);
                 break;
         }
-        Bitmap bitmap;
-        int targetW=image.getWidth();
-        int targetH=image.getHeight();
         if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
-            Bundle extras = data.getExtras();
-            bitmap=(Bitmap)extras.get("data");
-            try {
-                FileOutputStream out = new FileOutputStream(files[chooseView]);
-                bitmap.compress(Bitmap.CompressFormat.PNG,100,out);
-                out.flush();
-                out.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            BitmapFactory.Options bmOption=new BitmapFactory.Options();
-            bmOption.inJustDecodeBounds=true;
-            BitmapFactory.decodeFile(paths[chooseView],bmOption);
-            int photoW = bmOption.outWidth;
-            int photoH = bmOption.outHeight;
-            int scaleFactor=Math.min(photoW/targetW,photoH/targetH);
-            bmOption.inJustDecodeBounds=false;
-            bmOption.inSampleSize=scaleFactor;
-            Bitmap newbitmap=BitmapFactory.decodeFile(paths[chooseView],bmOption);
+            Bitmap newbitmap=BitmapFactory.decodeFile(paths[chooseView]);
+            newbitmap=BitmapHelper.modifyOrientation(newbitmap,paths[chooseView]);
             image.setBackground(null);
             image.setImageBitmap(newbitmap);
         }else if(requestCode==REQUEST_GET_FROM_GALLERY && resultCode==RESULT_OK) {
@@ -144,17 +125,7 @@ public class AddingAnnoucment extends AppCompatActivity implements View.OnLongCl
             Cursor cursor = getContentResolver().query(pickedImage, filePath, null, null, null);
             cursor.moveToFirst();
             String imagePath = cursor.getString(cursor.getColumnIndex(filePath[0]));
-            BitmapFactory.Options options = new BitmapFactory.Options();
-            options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-            BitmapFactory.Options bmOption = new BitmapFactory.Options();
-            bmOption.inJustDecodeBounds = true;
-            BitmapFactory.decodeFile(imagePath, bmOption);
-            int photoW = bmOption.outWidth;
-            int photoH = bmOption.outHeight;
-            int scaleFactor = Math.min(photoW / targetW, photoH / targetH);
-            bmOption.inJustDecodeBounds = false;
-            bmOption.inSampleSize = scaleFactor;
-            Bitmap newbitmap = BitmapFactory.decodeFile(imagePath, bmOption);
+            Bitmap newbitmap = BitmapFactory.decodeFile(imagePath);
             newbitmap= BitmapHelper.modifyOrientation(newbitmap,imagePath);
             image.setBackground(null);
             image.setImageBitmap(newbitmap);
@@ -178,11 +149,10 @@ public class AddingAnnoucment extends AppCompatActivity implements View.OnLongCl
 
 
     private void MakePicture(){
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-            startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
-        }
-
+        Intent intent=new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        Uri photoUri= FileProvider.getUriForFile(this,"com.example.melikyan.charity.fileprovider",files[chooseView]);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT,photoUri);
+        startActivityForResult(intent,REQUEST_TAKE_PHOTO);
     }
     private void getPictureFromGallery(){
         Intent photoPickerIntent = new Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);

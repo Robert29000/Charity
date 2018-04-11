@@ -8,9 +8,9 @@
     android:background="#000000">
 
     <ImageView
-        android:scaleType="centerInside"
+        android:scaleType="fitCenter"
         android:id="@+id/showimage"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
