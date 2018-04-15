@@ -54,7 +54,7 @@ public class LoginActivity extends AppCompatActivity {
             mAuth.signInWithEmailAndPassword(emailtext,passtext).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
-                    if(task.isComplete()){
+                    if(task.isSuccessful()){
                         MainActivity.GettingData(LoginActivity.this,LoginActivity.this);
                         MainActivity.GetUserInfo(mAuth.getCurrentUser());
                     }else new Toast(LoginActivity.this).makeText(LoginActivity.this,"Неверный логин или пароль",Toast.LENGTH_SHORT).show();

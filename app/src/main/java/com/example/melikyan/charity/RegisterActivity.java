@@ -70,7 +70,7 @@ public class RegisterActivity extends AppCompatActivity {
             mAuth.createUserWithEmailAndPassword(mail, pass).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
-                    if (task.isComplete()) {
+                    if (task.isSuccessful()) {
                         FirebaseUser user=mAuth.getCurrentUser();
                         mDataBase = FirebaseDatabase.getInstance().getReference();
                         mDataBase.child("Users").child(user.getUid()).child("email").setValue(mail);

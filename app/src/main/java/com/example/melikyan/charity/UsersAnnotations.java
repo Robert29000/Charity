@@ -11,15 +11,16 @@ import com.google.firebase.database.IgnoreExtraProperties;
 @IgnoreExtraProperties
 public class UsersAnnotations {
     public String domain,name,text;
-    public int moneyincome,moneyneeded;
+    public int moneyincome,moneyneeded,index,imagescount;
     public String uid;
     public Bitmap bitmap;
-    UsersAnnotations(String domain,int moneyincome,int moneyneeded,String name,String text){
+    public UsersAnnotations(String domain,int moneyincome,int moneyneeded,String name,String text,int imagescount){
         this.domain=domain;
         this.moneyincome=moneyincome;
         this.moneyneeded=moneyneeded;
         this.name=name;
         this.text=text;
+        this.imagescount=imagescount;
     }
     UsersAnnotations(){
 

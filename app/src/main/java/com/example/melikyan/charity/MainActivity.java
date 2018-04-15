@@ -12,6 +12,7 @@ import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
@@ -21,6 +22,7 @@ import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.target.Target;
 import com.example.melikyan.charity.MainApplication.AnnoucmentFragment;
 import com.example.melikyan.charity.MainApplication.ApplicationActivity;
+import com.example.melikyan.charity.MainApplication.MyAnnoucFragmnet;
 import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -41,11 +43,14 @@ import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
+    private static ImageView image;
+    public static int targetW,targetH;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mAuth=FirebaseAuth.getInstance();
+        image=findViewById(R.id.testimage1);
         FirebaseUser user=mAuth.getCurrentUser();
         if(user==null){
             Intent intent=new Intent(this,LoginActivity.class);
@@ -66,32 +71,54 @@ public class MainActivity extends AppCompatActivity {
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for(DataSnapshot postData:dataSnapshot.getChildren()){
-                    String key=postData.getKey().substring(0,postData.getKey().lastIndexOf("-"));
-                    if(!key.equals(user.getUid())) {
-                        AnnoucmentFragment.users.add(postData.getValue(UsersAnnotations.class));
-                        int counter = AnnoucmentFragment.users.size();
-                        AnnoucmentFragment.users.get(counter - 1).uid = postData.getKey();
-                    }
+                if(dataSnapshot.getValue()==null){Intent intent=new Intent(context,ApplicationActivity.class);
+                    context.startActivity(intent);
+                    activity.finish();
                 }
-                for(int i=0;i<AnnoucmentFragment.users.size();i++) {
-                    final int counter=i;
-                    StorageReference ref=storage.child("images/" + AnnoucmentFragment.users.get(i).uid + "/" + "image-0");
-                    try {
-                        final File localFile = File.createTempFile("Images", ".jpg");
-                        ref.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-                            @Override
-                            public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                                AnnoucmentFragment.users.get(counter).bitmap= BitmapFactory.decodeFile(localFile.getAbsolutePath());
-                                if(counter==AnnoucmentFragment.users.size()-1){
-                                    Intent intent=new Intent(context,ApplicationActivity.class);
-                                    context.startActivity(intent);
-                                    activity.finish();
+                else {
+                    for (DataSnapshot postData : dataSnapshot.getChildren()) {
+                        String key=postData.getKey().substring(0,postData.getKey().lastIndexOf("-"));
+                        if (!key.equals(user.getUid())) {
+                            AnnoucmentFragment.users.add(postData.getValue(UsersAnnotations.class));
+                            int counter = AnnoucmentFragment.users.size();
+                            AnnoucmentFragment.users.get(counter - 1).uid = postData.getKey();
+                        }
+                    }
+                    if(AnnoucmentFragment.users.size()==0){
+                        Intent intent = new Intent(context, ApplicationActivity.class);
+                        context.startActivity(intent);
+                        activity.finish();
+                    }
+                    for (int i = 0; i < AnnoucmentFragment.users.size(); i++) {
+                        final int counter = i;
+                        StorageReference ref = storage.child("images/" + AnnoucmentFragment.users.get(i).uid + "/" + "image-0");
+                        try {
+                            final File localFile = File.createTempFile("Images", ".jpg");
+                            ref.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                                @Override
+                                public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                                    targetW = image.getWidth();
+                                    targetH = image.getHeight();
+                                    BitmapFactory.Options options=new BitmapFactory.Options();
+                                    options.inJustDecodeBounds=true;
+                                    BitmapFactory.decodeFile(localFile.getAbsolutePath(),options);
+                                    int photoW = options.outWidth;
+                                    int photoH = options.outHeight;
+                                    int scaleFactor =Math.min(photoW/targetW,photoH/targetH);
+                                    options.inJustDecodeBounds=false;
+                                    options.inSampleSize=scaleFactor;
+                                    options.inPurgeable=true;
+                                    AnnoucmentFragment.users.get(counter).bitmap = BitmapFactory.decodeFile(localFile.getAbsolutePath(),options);
+                                    if (counter == AnnoucmentFragment.users.size() - 1) {
+                                        Intent intent = new Intent(context, ApplicationActivity.class);
+                                        context.startActivity(intent);
+                                        activity.finish();
+                                    }
                                 }
-                            }
-                        });
-                    }catch (IOException e){
-                        e.printStackTrace();
+                            });
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
             }
@@ -102,6 +129,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
     public static UserInfo currentUserInfo=new UserInfo();
     public static void GetUserInfo(FirebaseUser user){
         ValueEventListener listener=new ValueEventListener() {

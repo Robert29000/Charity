@@ -13,8 +13,11 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.melikyan.charity.AnnotationInfo;
+import com.example.melikyan.charity.MainApplication.AnnoucmentFragment;
 import com.example.melikyan.charity.MainApplication.ApplicationActivity;
+import com.example.melikyan.charity.MainApplication.MyAnnoucFragmnet;
 import com.example.melikyan.charity.R;
+import com.example.melikyan.charity.UsersAnnotations;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -58,11 +61,12 @@ public class finish_creating_annouc extends AppCompatActivity {
                     long counter = (long) dataSnapshot.getValue();
                     long numberofan = counter + 1;
                     database.child("Users").child(user.getUid()).child("numberOfAnnouc").setValue(numberofan);
-                    database.child("Annoucments").child(user.getUid() + "-" + numberofan).child("name").setValue(AnnotationInfo.name);
-                    database.child("Annoucments").child(user.getUid() + "-" + numberofan).child("domain").setValue(AnnotationInfo.domain);
-                    database.child("Annoucments").child(user.getUid() + "-" + numberofan).child("text").setValue(AnnotationInfo.anottext);
-                    database.child("Annoucments").child(user.getUid() + "-" + numberofan).child("moneyneeded").setValue(AnnotationInfo.moneyneeded);
-                    database.child("Annoucments").child(user.getUid() + "-" + numberofan).child("moneyincome").setValue(0);
+                    database.child("Annoucments").child(user.getUid()+"-"+numberofan).child("name").setValue(AnnotationInfo.name);
+                    database.child("Annoucments").child(user.getUid()+"-"+numberofan).child("domain").setValue(AnnotationInfo.domain);
+                    database.child("Annoucments").child(user.getUid()+"-"+numberofan).child("text").setValue(AnnotationInfo.anottext);
+                    database.child("Annoucments").child(user.getUid()+"-"+numberofan).child("moneyneeded").setValue(AnnotationInfo.moneyneeded);
+                    database.child("Annoucments").child(user.getUid()+"-"+numberofan).child("moneyincome").setValue(0);
+                    database.child("Annoucments").child(user.getUid()+"-"+numberofan).child("imagescount").setValue(AnnotationInfo.bits.size());
                     StorageReference anRef=imagesRef.child(user.getUid()+"-"+numberofan);
                     UploadTask task;
                     final ProgressBar bar=findViewById(R.id.progressbar);
@@ -83,6 +87,7 @@ public class finish_creating_annouc extends AppCompatActivity {
                                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                                     bar.incrementProgressBy(1);
                                     if (courent == max) {
+                                        AnnotationInfo.bits.clear();
                                         Intent intent = new Intent(finish_creating_annouc.this, ApplicationActivity.class);
                                         startActivity(intent);
                                     }
