@@ -1,4 +1,4 @@
-package com.example.melikyan.charity;
+package com.example.melikyan.charity.Adapters;
 
 import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
@@ -6,6 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+
+import com.example.melikyan.charity.R;
 
 import java.util.ArrayList;
 

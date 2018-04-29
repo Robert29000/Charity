@@ -18,8 +18,10 @@ import android.widget.Button;
 
 import com.example.melikyan.charity.CreatingAnnoucment.AddingAnnoucment;
 import com.example.melikyan.charity.R;
+import com.example.melikyan.charity.UsersAnnotations;
 
 
+import java.util.ArrayList;
 
 import static com.example.melikyan.charity.R.id.toolbar;
 
@@ -27,10 +29,14 @@ public class ApplicationActivity extends AppCompatActivity implements View.OnCli
     private ViewPager pager;
     private PagerAdapter pagerAdapter;
     private Button button;
+    public static ArrayList<UsersAnnotations> users;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_application);
+        if(savedInstanceState==null) {
+            users = getIntent().getParcelableArrayListExtra("ANNOUCMENTS");
+        }else users=savedInstanceState.getParcelableArrayList("USERS");
         Toolbar mytoolbar=findViewById(toolbar);
         setSupportActionBar(mytoolbar);
         pager=findViewById(R.id.pager);
@@ -100,7 +106,9 @@ public class ApplicationActivity extends AppCompatActivity implements View.OnCli
 
     }
 
-
-
-
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelableArrayList("USERS",users);
+    }
 }

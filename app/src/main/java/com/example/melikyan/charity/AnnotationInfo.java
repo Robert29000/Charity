@@ -14,5 +14,6 @@ public class AnnotationInfo {
     public static String domain;
     public static ArrayList<File> bits=new ArrayList<>();
     public static String anottext;
+    public static int wallet;
     public static int moneyneeded;
 }

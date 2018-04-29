@@ -1,7 +1,5 @@
 package com.example.melikyan.charity.MainApplication;
 
-import android.content.Context;
-import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -12,12 +10,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 
-import com.example.melikyan.charity.AnnoucAdapter;
+import com.example.melikyan.charity.Adapters.AnnoucAdapter;
 import com.example.melikyan.charity.BitmapHelper;
-import com.example.melikyan.charity.MainActivity;
+import com.example.melikyan.charity.StartActivities.MainActivity;
 import com.example.melikyan.charity.R;
 import com.example.melikyan.charity.RecyclerViewClickListener;
 import com.example.melikyan.charity.UsersAnnotations;
@@ -26,7 +23,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
@@ -47,13 +43,18 @@ public class MyAnnoucFragmnet extends Fragment {
     public static RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private ProgressBar bar;
-    private static ArrayList<UsersAnnotations> myann=new ArrayList<>();
+    private ArrayList<UsersAnnotations> myann=new ArrayList<>();
+
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
-        Log.d("EASY","Oncreate");
-        super.onCreate(savedInstanceState);
-        myann.clear();
-        GetMyAnnouc();
+        if(savedInstanceState==null) {
+            super.onCreate(savedInstanceState);
+            myann.clear();
+            GetMyAnnouc();
+        }else {
+            myann=savedInstanceState.getParcelableArrayList("MYANN");
+        }
     }
 
     @Nullable
@@ -101,19 +102,7 @@ public class MyAnnoucFragmnet extends Fragment {
                         ref.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
                             @Override
                             public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                                int targetW = MainActivity.targetW;
-                                int targetH = MainActivity.targetH;
-                                BitmapFactory.Options options=new BitmapFactory.Options();
-                                options.inJustDecodeBounds=true;
-                                BitmapFactory.decodeFile(localFile.getAbsolutePath(),options);
-                                int photoW = options.outWidth;
-                                int photoH = options.outHeight;
-                                int scaleFactor =Math.min(photoW/targetW,photoH/targetH);
-                                options.inJustDecodeBounds=false;
-                                options.inSampleSize=scaleFactor;
-                                options.inPurgeable=true;
-                                myann.get(counter).bitmap= BitmapHelper.modifyOrientation(BitmapFactory.decodeFile(localFile.getAbsolutePath(),options),
-                                                    localFile.getAbsolutePath());
+                                myann.get(counter).bimapUri= localFile.getAbsolutePath();
                                 if(counter==myann.size()-1){
                                     bar.setVisibility(View.INVISIBLE);
                                     mAdapter.notifyDataSetChanged();
@@ -134,7 +123,9 @@ public class MyAnnoucFragmnet extends Fragment {
         myRef.addListenerForSingleValueEvent(listener);
     }
 
-
-
-
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelableArrayList("MYANN",myann);
+    }
 }

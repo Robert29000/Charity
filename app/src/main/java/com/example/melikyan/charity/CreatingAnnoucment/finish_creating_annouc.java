@@ -45,10 +45,12 @@ public class finish_creating_annouc extends AppCompatActivity {
 
     public void finish(View view) {
         final EditText text=findViewById(R.id.moneyneeded);
-        if(text.getText().toString().equals("")){
+        final EditText wallet=findViewById(R.id.cardnumber);
+        if(text.getText().toString().equals("") || wallet.getText().toString().equals("")){
             new Toast(this).makeText(this,"Введите необходимую сумму денег",Toast.LENGTH_LONG).show();
         }else {
             AnnotationInfo.moneyneeded = Integer.parseInt(text.getText().toString());
+            AnnotationInfo.wallet= Integer.parseInt(wallet.getText().toString());
             FirebaseAuth mAuth = FirebaseAuth.getInstance();
             final FirebaseUser user = mAuth.getCurrentUser();
             final DatabaseReference database = FirebaseDatabase.getInstance().getReference();
@@ -67,6 +69,7 @@ public class finish_creating_annouc extends AppCompatActivity {
                     database.child("Annoucments").child(user.getUid()+"-"+numberofan).child("moneyneeded").setValue(AnnotationInfo.moneyneeded);
                     database.child("Annoucments").child(user.getUid()+"-"+numberofan).child("moneyincome").setValue(0);
                     database.child("Annoucments").child(user.getUid()+"-"+numberofan).child("imagescount").setValue(AnnotationInfo.bits.size());
+                    database.child("Annoucments").child(user.getUid()+"-"+numberofan).child("yandexwallet").setValue(AnnotationInfo.wallet);
                     StorageReference anRef=imagesRef.child(user.getUid()+"-"+numberofan);
                     UploadTask task;
                     final ProgressBar bar=findViewById(R.id.progressbar);

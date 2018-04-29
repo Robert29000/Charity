@@ -1,6 +1,7 @@
 package com.example.melikyan.charity;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.support.media.ExifInterface;
 
@@ -51,5 +52,17 @@ public class BitmapHelper {
         Matrix matrix = new Matrix();
         matrix.preScale(horizontal ? -1 : 1, vertical ? -1 : 1);
         return Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+    }
+    public static Bitmap decreaseSize(String uri){
+        BitmapFactory.Options options=new BitmapFactory.Options();
+        options.inJustDecodeBounds=true;
+        BitmapFactory.decodeFile(uri,options);
+        int photoW = options.outWidth;
+        int photoH = options.outHeight;
+        int scaleFactor=Math.min(photoW/400,photoH/200);
+        options.inJustDecodeBounds=false;
+        options.inSampleSize=scaleFactor;
+        options.inPurgeable=true;
+        return BitmapFactory.decodeFile(uri,options);
     }
 }

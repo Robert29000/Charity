@@ -1,29 +1,20 @@
-package com.example.melikyan.charity;
+package com.example.melikyan.charity.StartActivities;
 
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.ImageView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.animation.GlideAnimation;
-import com.bumptech.glide.request.target.SimpleTarget;
-import com.bumptech.glide.request.target.Target;
 import com.example.melikyan.charity.MainApplication.AnnoucmentFragment;
 import com.example.melikyan.charity.MainApplication.ApplicationActivity;
-import com.example.melikyan.charity.MainApplication.MyAnnoucFragmnet;
-import com.firebase.ui.storage.images.FirebaseImageLoader;
+import com.example.melikyan.charity.R;
+import com.example.melikyan.charity.StartActivities.LoginActivity;
+import com.example.melikyan.charity.UserInfo;
+import com.example.melikyan.charity.UsersAnnotations;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -39,23 +30,20 @@ import com.google.firebase.storage.StorageReference;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 
 public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
-    private static ImageView image;
-    public static int targetW,targetH;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mAuth=FirebaseAuth.getInstance();
-        image=findViewById(R.id.testimage1);
         FirebaseUser user=mAuth.getCurrentUser();
         if(user==null){
             Intent intent=new Intent(this,LoginActivity.class);
             startActivity(intent);
-            finish();
         }else{
             GetUserInfo(user);
             GettingData(this,this);
@@ -64,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public static void GettingData(final Context context, final Activity activity){
+        final ArrayList<UsersAnnotations> annotations=new ArrayList<>();
         Query myRef= FirebaseDatabase.getInstance().getReference().child("Annoucments").limitToFirst(15);
         final StorageReference storage= FirebaseStorage.getInstance().getReference();
         FirebaseAuth mAuth=FirebaseAuth.getInstance();
@@ -79,41 +68,34 @@ public class MainActivity extends AppCompatActivity {
                     for (DataSnapshot postData : dataSnapshot.getChildren()) {
                         String key=postData.getKey().substring(0,postData.getKey().lastIndexOf("-"));
                         if (!key.equals(user.getUid())) {
-                            AnnoucmentFragment.users.add(postData.getValue(UsersAnnotations.class));
-                            int counter = AnnoucmentFragment.users.size();
-                            AnnoucmentFragment.users.get(counter - 1).uid = postData.getKey();
+                            annotations.add(postData.getValue(UsersAnnotations.class));
+                            int counter = annotations.size();
+                            annotations.get(counter - 1).uid = postData.getKey();
                         }
                     }
-                    if(AnnoucmentFragment.users.size()==0){
+                    if(annotations.size()==0){
                         Intent intent = new Intent(context, ApplicationActivity.class);
                         context.startActivity(intent);
                         activity.finish();
                     }
-                    for (int i = 0; i < AnnoucmentFragment.users.size(); i++) {
+                    for (int i = 0; i < annotations.size(); i++) {
                         final int counter = i;
-                        StorageReference ref = storage.child("images/" + AnnoucmentFragment.users.get(i).uid + "/" + "image-0");
+                        final StorageReference ref = storage.child("images/" + annotations.get(i).uid + "/" + "image-0");
                         try {
-                            final File localFile = File.createTempFile("Images", ".jpg");
+                            final File localFile = File.createTempFile("Images"+System.currentTimeMillis(), ".jpg");
                             ref.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
                                 @Override
                                 public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                                    targetW = image.getWidth();
-                                    targetH = image.getHeight();
-                                    BitmapFactory.Options options=new BitmapFactory.Options();
-                                    options.inJustDecodeBounds=true;
-                                    BitmapFactory.decodeFile(localFile.getAbsolutePath(),options);
-                                    int photoW = options.outWidth;
-                                    int photoH = options.outHeight;
-                                    int scaleFactor =Math.min(photoW/targetW,photoH/targetH);
-                                    options.inJustDecodeBounds=false;
-                                    options.inSampleSize=scaleFactor;
-                                    options.inPurgeable=true;
-                                    AnnoucmentFragment.users.get(counter).bitmap = BitmapFactory.decodeFile(localFile.getAbsolutePath(),options);
-                                    if (counter == AnnoucmentFragment.users.size() - 1) {
+
+                                    annotations.get(counter).bimapUri = localFile.getAbsolutePath();
+
+                                    if (counter == annotations.size() - 1) {
                                         Intent intent = new Intent(context, ApplicationActivity.class);
+                                        intent.putParcelableArrayListExtra("ANNOUCMENTS",annotations);
                                         context.startActivity(intent);
                                         activity.finish();
                                     }
+
                                 }
                             });
                         } catch (IOException e) {

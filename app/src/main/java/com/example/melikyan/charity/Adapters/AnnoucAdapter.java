@@ -1,18 +1,20 @@
-package com.example.melikyan.charity;
+package com.example.melikyan.charity.Adapters;
 
-import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
+import com.example.melikyan.charity.BitmapHelper;
+import com.example.melikyan.charity.R;
+import com.example.melikyan.charity.RecyclerViewClickListener;
+import com.example.melikyan.charity.UsersAnnotations;
 
 import java.util.ArrayList;
 
@@ -71,7 +73,8 @@ public class AnnoucAdapter extends RecyclerView.Adapter<AnnoucAdapter.ViewHolder
         holder.bar.setMax(user.moneyneeded);
         holder.bar.setProgress(user.moneyincome);
         holder.money.setText(user.moneyincome+"/"+user.moneyneeded);
-        holder.image.setImageBitmap(user.bitmap);
+        Bitmap bitmap = BitmapHelper.decreaseSize(user.bimapUri);
+        holder.image.setImageBitmap(bitmap);
     }
 
 }

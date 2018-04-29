@@ -57,4 +57,5 @@
     <string name="MoneyNeeded">Введите необходимую сумму денег</string>
     <string name="CreateAnnoc">Создать</string>
     <string name="Donate">Пожертвовать</string>
+    <string name="input_YandexCardNumber">Введите номер счета в Яндекс.Деньги</string>
 </resources>

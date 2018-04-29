@@ -14,13 +14,13 @@
 
     <application
         android:allowBackup="true"
+        android:hardwareAccelerated="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:largeHeap="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.AppCompat.Light.NoActionBar"
-        android:hardwareAccelerated="false"
-        android:largeHeap="true">
+        android:theme="@style/Theme.AppCompat.Light.NoActionBar">
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="com.example.melikyan.charity.fileprovider"
@@ -31,15 +31,15 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
-        <activity android:name=".MainActivity">
+        <activity android:name=".StartActivities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".LoginActivity" />
-        <activity android:name=".RegisterActivity" />
+        <activity android:name=".StartActivities.LoginActivity" />
+        <activity android:name=".StartActivities.RegisterActivity" />
         <activity android:name=".MainApplication.ApplicationActivity" />
         <activity android:name=".CreatingAnnoucment.AddingAnnoucment" />
         <activity android:name=".CreatingAnnoucment.ShowFullSizeImage" />
@@ -48,6 +48,7 @@
             android:windowSoftInputMode="adjustPan" />
         <activity android:name=".CreatingAnnoucment.finish_creating_annouc" />
         <activity android:name=".MainApplication.InformationOfAnnoucment" />
+        <activity android:name=".Web"></activity>
     </application>
 
 </manifest>
