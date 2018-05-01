@@ -13,6 +13,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -21,6 +22,7 @@ import com.example.melikyan.charity.R;
 import com.example.melikyan.charity.UsersAnnotations;
 
 
+import java.io.File;
 import java.util.ArrayList;
 
 import static com.example.melikyan.charity.R.id.toolbar;
@@ -29,7 +31,7 @@ public class ApplicationActivity extends AppCompatActivity implements View.OnCli
     private ViewPager pager;
     private PagerAdapter pagerAdapter;
     private Button button;
-    public static ArrayList<UsersAnnotations> users;
+    public  ArrayList<UsersAnnotations> users;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,6 +90,9 @@ public class ApplicationActivity extends AppCompatActivity implements View.OnCli
             Fragment fragment=null;
             switch (position){
                 case 0:fragment=new AnnoucmentFragment();
+                        Bundle bundle=new Bundle();
+                        bundle.putParcelableArrayList("USERS",users);
+                        fragment.setArguments(bundle);
                         break;
                 case 1:fragment=new MyAnnoucFragmnet();
 
@@ -108,7 +113,18 @@ public class ApplicationActivity extends AppCompatActivity implements View.OnCli
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
         outState.putParcelableArrayList("USERS",users);
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        File[] files=this.getCacheDir().listFiles();
+        if(files!=null) {
+            for (File f : files) {
+                f.delete();
+            }
+        }
     }
 }

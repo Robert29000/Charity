@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ import android.support.design.widget.TabLayout;
 
 
 import com.example.melikyan.charity.Adapters.AnnoucAdapter;
+import com.example.melikyan.charity.FirebaseManager;
 import com.example.melikyan.charity.R;
 import com.example.melikyan.charity.RecyclerViewClickListener;
 import com.example.melikyan.charity.UsersAnnotations;
@@ -28,13 +30,13 @@ public class AnnoucmentFragment extends Fragment  {
     TabLayout tableLayout;
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
+    private LinearLayoutManager mLayoutManager;
     private ArrayList<UsersAnnotations> list;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view=inflater.inflate(R.layout.annoucments,container,false);
-        list=ApplicationActivity.users;
+        list=getArguments().getParcelableArrayList("USERS");
         mRecyclerView=view.findViewById(R.id.annouclists);
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(getContext());
@@ -48,8 +50,24 @@ public class AnnoucmentFragment extends Fragment  {
                 startActivity(intent);
             }
         };
-        mAdapter=new AnnoucAdapter(list,listener);
-        mRecyclerView.setAdapter(mAdapter);
+        if(list !=null) {
+            mAdapter = new AnnoucAdapter(list, listener);
+            mRecyclerView.setAdapter(mAdapter);
+            mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                @Override
+                public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                    if(dy>0){
+                            int visibleItemCount = mLayoutManager.getChildCount();
+                            int totalItemCount = mLayoutManager.getItemCount();
+                            int pastItemCount = mLayoutManager.findFirstVisibleItemPosition();
+                            if (visibleItemCount + pastItemCount >= totalItemCount){
+                                FirebaseManager.GettingData(list,mAdapter);
+                            }
+
+                        }
+                }
+            });
+        }
         return view;
     }
 

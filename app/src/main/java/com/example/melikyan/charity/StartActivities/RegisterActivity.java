@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 import android.support.v7.widget.Toolbar;
 
+import com.example.melikyan.charity.FirebaseManager;
 import com.example.melikyan.charity.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -64,10 +65,10 @@ public class RegisterActivity extends AppCompatActivity {
                         mDataBase.child("Users").child(user.getUid()).child("name").setValue(name.getText().toString());
                         mDataBase.child("Users").child(user.getUid()).child("lastname").setValue(lastname.getText().toString());
                         mDataBase.child("Users").child(user.getUid()).child("region").setValue(region.getText().toString());
-                        mDataBase.child("Users").child(user.getUid()).child("age").setValue(age.getText().toString());
+                        mDataBase.child("Users").child(user.getUid()).child("age").setValue(Long.parseLong(age.getText().toString()));
                         mDataBase.child("Users").child(user.getUid()).child("numberOfAnnouc").setValue(0);
-                        MainActivity.GettingData(RegisterActivity.this,RegisterActivity.this);
-                        MainActivity.GetUserInfo(user);
+                        FirebaseManager.GettingData(RegisterActivity.this,RegisterActivity.this);
+                        FirebaseManager.GetUserInfo(user);
                     } else
                         new Toast(RegisterActivity.this).makeText(RegisterActivity.this, "Почтовый адресс уже используется", Toast.LENGTH_SHORT).show();
                 }

@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.melikyan.charity.FirebaseManager;
 import com.example.melikyan.charity.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -42,8 +43,8 @@ public class LoginActivity extends AppCompatActivity {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if(task.isSuccessful()){
-                        MainActivity.GettingData(LoginActivity.this,LoginActivity.this);
-                        MainActivity.GetUserInfo(mAuth.getCurrentUser());
+                        FirebaseManager.GettingData(LoginActivity.this,LoginActivity.this);
+                        FirebaseManager.GetUserInfo(mAuth.getCurrentUser());
                     }else new Toast(LoginActivity.this).makeText(LoginActivity.this,"Неверный логин или пароль",Toast.LENGTH_SHORT).show();
                 }
             });

@@ -12,6 +12,11 @@ import java.io.IOException;
  */
 
 public class BitmapHelper {
+
+
+
+
+
     public static Bitmap modifyOrientation(Bitmap bitmap, String image_absolute_path)  {
         ExifInterface ei = null;
         try {
@@ -53,16 +58,5 @@ public class BitmapHelper {
         matrix.preScale(horizontal ? -1 : 1, vertical ? -1 : 1);
         return Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
     }
-    public static Bitmap decreaseSize(String uri){
-        BitmapFactory.Options options=new BitmapFactory.Options();
-        options.inJustDecodeBounds=true;
-        BitmapFactory.decodeFile(uri,options);
-        int photoW = options.outWidth;
-        int photoH = options.outHeight;
-        int scaleFactor=Math.min(photoW/400,photoH/200);
-        options.inJustDecodeBounds=false;
-        options.inSampleSize=scaleFactor;
-        options.inPurgeable=true;
-        return BitmapFactory.decodeFile(uri,options);
-    }
+
 }

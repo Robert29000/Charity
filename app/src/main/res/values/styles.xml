@@ -6,6 +6,8 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:textColor">@color/colorWhite</item>
+        <item name="android:itemBackground">@color/colorWhite</item>
     </style>
 
     <style name="FullscreenTheme" parent="AppTheme">
@@ -17,7 +19,7 @@
     </style>
 
     <style name="FullscreenActionBarStyle" parent="Widget.AppCompat.ActionBar">
-        <item name="android:background">@color/black_overlay</item>
+        <item name="android:background">@color/colorWhite</item>
     </style>
 
     <style name="AppTheme.NoActionBar">

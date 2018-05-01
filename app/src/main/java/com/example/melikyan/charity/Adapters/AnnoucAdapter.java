@@ -2,7 +2,6 @@ package com.example.melikyan.charity.Adapters;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,7 +10,6 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.example.melikyan.charity.BitmapHelper;
 import com.example.melikyan.charity.R;
 import com.example.melikyan.charity.RecyclerViewClickListener;
 import com.example.melikyan.charity.UsersAnnotations;
@@ -26,12 +24,12 @@ public class AnnoucAdapter extends RecyclerView.Adapter<AnnoucAdapter.ViewHolder
     ArrayList<UsersAnnotations> users;
     private RecyclerViewClickListener mListener;
 
+
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public TextView text,money;
         public ImageView image;
         public ProgressBar bar;
         private RecyclerViewClickListener mListener;
-
         public ViewHolder(View v,RecyclerViewClickListener listener) {
             super(v);
             text=v.findViewById(R.id.annoucname);
@@ -68,12 +66,13 @@ public class AnnoucAdapter extends RecyclerView.Adapter<AnnoucAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
+
         UsersAnnotations user=users.get(position);
         holder.text.setText(user.name);
         holder.bar.setMax(user.moneyneeded);
         holder.bar.setProgress(user.moneyincome);
         holder.money.setText(user.moneyincome+"/"+user.moneyneeded);
-        Bitmap bitmap = BitmapHelper.decreaseSize(user.bimapUri);
+        Bitmap bitmap = BitmapFactory.decodeFile(user.bimapUri);
         holder.image.setImageBitmap(bitmap);
     }
 

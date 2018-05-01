@@ -58,4 +58,7 @@
     <string name="CreateAnnoc">Создать</string>
     <string name="Donate">Пожертвовать</string>
     <string name="input_YandexCardNumber">Введите номер счета в Яндекс.Деньги</string>
+    <string name="ChangeProfile">Изменить</string>
+    <string name="Quit">Выйти</string>
+    <string name="Save">Сохранить</string>
 </resources>

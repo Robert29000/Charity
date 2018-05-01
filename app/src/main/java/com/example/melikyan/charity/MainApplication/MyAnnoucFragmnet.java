@@ -53,6 +53,7 @@ public class MyAnnoucFragmnet extends Fragment {
             myann.clear();
             GetMyAnnouc();
         }else {
+            super.onCreate(savedInstanceState);
             myann=savedInstanceState.getParcelableArrayList("MYANN");
         }
     }
@@ -125,7 +126,7 @@ public class MyAnnoucFragmnet extends Fragment {
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
         outState.putParcelableArrayList("MYANN",myann);
+        super.onSaveInstanceState(outState);
     }
 }

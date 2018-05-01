@@ -50,7 +50,7 @@ public class InformationOfAnnoucment extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_information_of_annoucment);
         users=getIntent().getParcelableExtra("VALUE");
-        bitmaps.add(BitmapHelper.decreaseSize(users.bimapUri));
+        bitmaps.add(BitmapFactory.decodeFile(users.bimapUri));
         ProgressBar bar=findViewById(R.id.progressbar);
         bar.setMax(users.moneyneeded);
         bar.setProgress(users.moneyincome);
@@ -75,31 +75,31 @@ public class InformationOfAnnoucment extends AppCompatActivity {
                     waitingBar.setVisibility(View.INVISIBLE);
                     break;
                 case 2:
-                    StorageReference ref = storage.child("images/" + users.uid + "/" + "image-1");
+                    StorageReference ref = storage.child("images/"+users.uid + "/" + "image-1");
                     final File localFile=File.createTempFile("Images"+System.currentTimeMillis(),".jpg");
                     ref.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                            bitmaps.add(BitmapHelper.decreaseSize(localFile.getAbsolutePath()));
+                            bitmaps.add(BitmapFactory.decodeFile(localFile.getAbsolutePath()));
                             mAdapter = new ImageAdapter(bitmaps);
                             mRecyclerView.setAdapter(mAdapter);
                             waitingBar.setVisibility(View.INVISIBLE);
                         }
                     });
                     break;
-                case 3:ref = storage.child("images/" + users.uid + "/" + "image-1");
+                case 3:ref = storage.child("images/"+users.uid + "/" + "image-1");
                     final File localfile=File.createTempFile("Images"+System.currentTimeMillis(),".jpg");
                     ref.getFile(localfile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                            bitmaps.add( BitmapHelper.decreaseSize(localfile.getAbsolutePath()));
+                            bitmaps.add(BitmapFactory.decodeFile(localfile.getAbsolutePath()));
                         }
                     });
-                    ref = storage.child("images/" + users.uid + "/" + "image-2");
+                    ref = storage.child("images/"+users.uid + "/" + "image-2");
                     ref.getFile(localfile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                            bitmaps.add( BitmapHelper.decreaseSize(localfile.getAbsolutePath()));
+                            bitmaps.add(BitmapFactory.decodeFile(localfile.getAbsolutePath()));
                             mAdapter = new ImageAdapter(bitmaps);
                             mRecyclerView.setAdapter(mAdapter);
                             waitingBar.setVisibility(View.INVISIBLE);

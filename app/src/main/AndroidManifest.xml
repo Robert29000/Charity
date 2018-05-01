@@ -4,6 +4,7 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
     <uses-feature
         android:name="android.hardware.camera"
@@ -40,7 +41,8 @@
         </activity>
         <activity android:name=".StartActivities.LoginActivity" />
         <activity android:name=".StartActivities.RegisterActivity" />
-        <activity android:name=".MainApplication.ApplicationActivity" />
+        <activity android:name=".MainApplication.ApplicationActivity"
+            android:windowSoftInputMode="adjustPan" />
         <activity android:name=".CreatingAnnoucment.AddingAnnoucment" />
         <activity android:name=".CreatingAnnoucment.ShowFullSizeImage" />
         <activity

@@ -138,7 +138,6 @@ public class AddingAnnoucment extends AppCompatActivity implements View.OnLongCl
             out.close();
         }else if(requestCode==REQUEST_GET_FROM_GALLERY && resultCode==RESULT_OK) {
             Uri pickedImage = data.getData();
-            InputStream imageStream = getContentResolver().openInputStream(pickedImage);
             String result;
             Cursor cursor = getContentResolver().query(pickedImage, null, null, null, null);
             if (cursor == null) { // Source is Dropbox or other similar local file path
@@ -154,7 +153,7 @@ public class AddingAnnoucment extends AppCompatActivity implements View.OnLongCl
             image.setBackground(null);
             image.setImageBitmap(newbitmap);
             FileOutputStream out = new FileOutputStream(files[chooseView]);
-            newbitmap.compress(Bitmap.CompressFormat.JPEG, 40, out);
+            newbitmap.compress(Bitmap.CompressFormat.JPEG, 10, out);
             out.flush();
             out.close();
           }
