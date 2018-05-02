@@ -27,7 +27,6 @@ import com.example.melikyan.charity.R;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 
 import static com.example.melikyan.charity.R.id.toolbar;
 
@@ -218,7 +217,7 @@ public class AddingAnnoucment extends AppCompatActivity implements View.OnLongCl
         if(name.getText().toString().equals("") || domain.getText().toString().equals("")){
             new Toast(this).makeText(this,"Заполните все поля",Toast.LENGTH_LONG).show();
         }else {
-            Intent intent = new Intent(this, MakingAnnotation.class);
+            Intent intent = new Intent(this, WritingText.class);
             startActivity(intent);
         }
     }

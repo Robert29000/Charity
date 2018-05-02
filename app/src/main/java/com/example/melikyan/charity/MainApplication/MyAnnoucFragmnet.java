@@ -1,9 +1,11 @@
 package com.example.melikyan.charity.MainApplication;
 
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -11,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.example.melikyan.charity.Adapters.AnnoucAdapter;
 import com.example.melikyan.charity.BitmapHelper;
@@ -38,13 +41,14 @@ import java.util.ArrayList;
  * Created by melikyan on 20.02.2018.
  */
 
-public class MyAnnoucFragmnet extends Fragment {
+public class MyAnnoucFragmnet extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
     private RecyclerView mRecyclerView;
     public static RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private ProgressBar bar;
     private ArrayList<UsersAnnotations> myann=new ArrayList<>();
-
+    private SwipeRefreshLayout mSwipeRefreshLayout;
+    private TextView text;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -62,6 +66,10 @@ public class MyAnnoucFragmnet extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view=inflater.inflate(R.layout.myannoucments,container,false);
+        text=view.findViewById(R.id.noann);
+        mSwipeRefreshLayout=view.findViewById(R.id.swiperefresh);
+        mSwipeRefreshLayout.setOnRefreshListener(this);
+        mSwipeRefreshLayout.setColorSchemeColors(Color.RED);
         mRecyclerView=view.findViewById(R.id.myannouclists);
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(getContext());
@@ -95,6 +103,12 @@ public class MyAnnoucFragmnet extends Fragment {
                     }
                     myRef.removeEventListener(this);
                 }
+                if (myann.size()==0){
+                    bar.setVisibility(View.INVISIBLE);
+                    mSwipeRefreshLayout.setRefreshing(false);
+                    text.setVisibility(View.VISIBLE);
+
+                }
                 for(int i=0;i<myann.size();i++) {
                     final int counter=i;
                     StorageReference ref=storage.child("images/" + myann.get(i).uid+ "/" + "image-0");
@@ -106,7 +120,9 @@ public class MyAnnoucFragmnet extends Fragment {
                                 myann.get(counter).bimapUri= localFile.getAbsolutePath();
                                 if(counter==myann.size()-1){
                                     bar.setVisibility(View.INVISIBLE);
+                                    mSwipeRefreshLayout.setRefreshing(false);
                                     mAdapter.notifyDataSetChanged();
+                                    text.setVisibility(View.INVISIBLE);
                                 }
                             }
                         });
@@ -128,5 +144,12 @@ public class MyAnnoucFragmnet extends Fragment {
     public void onSaveInstanceState(Bundle outState) {
         outState.putParcelableArrayList("MYANN",myann);
         super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onRefresh() {
+        myann.clear();
+        mAdapter.notifyDataSetChanged();
+        GetMyAnnouc();
     }
 }

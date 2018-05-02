@@ -182,4 +182,6 @@ public class FirebaseManager {
         DatabaseReference storage=FirebaseDatabase.getInstance().getReference().child("Users").child(user.getUid());
         storage.addListenerForSingleValueEvent(listener);
     }
+
+
 }

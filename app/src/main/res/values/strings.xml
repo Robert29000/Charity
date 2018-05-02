@@ -61,4 +61,6 @@
     <string name="ChangeProfile">Изменить</string>
     <string name="Quit">Выйти</string>
     <string name="Save">Сохранить</string>
+    <string name="NotAddAnnouc">Вы еще не добавили объявлений</string>
+    <string name="NoAnnouc">Пока нет объявлений</string>
 </resources>

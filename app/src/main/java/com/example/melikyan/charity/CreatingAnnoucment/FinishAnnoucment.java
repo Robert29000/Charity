@@ -13,11 +13,9 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.melikyan.charity.AnnotationInfo;
-import com.example.melikyan.charity.MainApplication.AnnoucmentFragment;
 import com.example.melikyan.charity.MainApplication.ApplicationActivity;
-import com.example.melikyan.charity.MainApplication.MyAnnoucFragmnet;
+import com.example.melikyan.charity.OnMoneyChangedService;
 import com.example.melikyan.charity.R;
-import com.example.melikyan.charity.UsersAnnotations;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -33,7 +31,7 @@ import com.google.firebase.storage.UploadTask;
 
 import static com.example.melikyan.charity.R.id.toolbar;
 
-public class finish_creating_annouc extends AppCompatActivity {
+public class FinishAnnoucment extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +59,7 @@ public class finish_creating_annouc extends AppCompatActivity {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     long counter = (long) dataSnapshot.getValue();
-                    long numberofan = counter + 1;
+                    final long numberofan = counter + 1;
                     database.child("Users").child(user.getUid()).child("numberOfAnnouc").setValue(numberofan);
                     database.child("Annoucments").child(user.getUid()+"-"+numberofan).child("name").setValue(AnnotationInfo.name);
                     database.child("Annoucments").child(user.getUid()+"-"+numberofan).child("domain").setValue(AnnotationInfo.domain);
@@ -77,7 +75,7 @@ public class finish_creating_annouc extends AppCompatActivity {
                     bar.setMax(AnnotationInfo.bits.size());
                     final int max=AnnotationInfo.bits.size()-1;
                     if(AnnotationInfo.bits.size()==0){
-                        Intent intent = new Intent(finish_creating_annouc.this, ApplicationActivity.class);
+                        Intent intent = new Intent(FinishAnnoucment.this, ApplicationActivity.class);
                         startActivity(intent);
                     }else {
                         for (int i = 0; i < AnnotationInfo.bits.size(); i++) {
@@ -91,7 +89,10 @@ public class finish_creating_annouc extends AppCompatActivity {
                                     bar.incrementProgressBy(1);
                                     if (courent == max) {
                                         AnnotationInfo.bits.clear();
-                                        Intent intent = new Intent(finish_creating_annouc.this, ApplicationActivity.class);
+                                        Intent serviceIntent=new Intent(getApplicationContext(), OnMoneyChangedService.class);
+                                        serviceIntent.putExtra("UID",user.getUid()+"-"+numberofan);
+                                        startService(serviceIntent);
+                                        Intent intent = new Intent(FinishAnnoucment.this, ApplicationActivity.class);
                                         startActivity(intent);
                                     }
                                 }
@@ -99,7 +100,7 @@ public class finish_creating_annouc extends AppCompatActivity {
                             task.addOnFailureListener(new OnFailureListener() {
                                 @Override
                                 public void onFailure(@NonNull Exception e) {
-                                    new Toast(finish_creating_annouc.this).makeText(finish_creating_annouc.this,
+                                    new Toast(FinishAnnoucment.this).makeText(FinishAnnoucment.this,
                                             "Не удалось загрузить файлы,проверьте подлючение",
                                             Toast.LENGTH_LONG).show();
                                 }

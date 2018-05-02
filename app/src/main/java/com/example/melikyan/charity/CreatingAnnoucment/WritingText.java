@@ -14,12 +14,11 @@ import android.widget.Toast;
 
 
 import com.example.melikyan.charity.AnnotationInfo;
-import com.example.melikyan.charity.CreatingAnnoucment.finish_creating_annouc;
 import com.example.melikyan.charity.R;
 
 import static com.example.melikyan.charity.R.id.toolbar;
 
-public class MakingAnnotation extends AppCompatActivity {
+public class WritingText extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +45,7 @@ public class MakingAnnotation extends AppCompatActivity {
                     new Toast(this).makeText(this,"Напишите краткое описание",Toast.LENGTH_LONG).show();
                 }else {
                     AnnotationInfo.anottext = ed.getText().toString();
-                    Intent intent = new Intent(this, finish_creating_annouc.class);
+                    Intent intent = new Intent(this, FinishAnnoucment.class);
                     startActivity(intent);
                     return true;
                 }

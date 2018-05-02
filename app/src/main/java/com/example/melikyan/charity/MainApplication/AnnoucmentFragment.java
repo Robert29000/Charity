@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.support.design.widget.TabLayout;
+import android.widget.TextView;
 
 
 import com.example.melikyan.charity.Adapters.AnnoucAdapter;
@@ -67,6 +68,9 @@ public class AnnoucmentFragment extends Fragment  {
                         }
                 }
             });
+        }else {
+            TextView text=view.findViewById(R.id.noavailableann);
+            text.setVisibility(View.VISIBLE);
         }
         return view;
     }
