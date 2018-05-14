@@ -9,7 +9,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +20,7 @@ import com.example.melikyan.charity.Adapters.AnnoucAdapter;
 import com.example.melikyan.charity.FirebaseManager;
 import com.example.melikyan.charity.R;
 import com.example.melikyan.charity.RecyclerViewClickListener;
-import com.example.melikyan.charity.UsersAnnotations;
+import com.example.melikyan.charity.Data.UsersAnnotations;
 
 
 import java.util.ArrayList;
@@ -33,6 +32,7 @@ public class AnnoucmentFragment extends Fragment  {
     private RecyclerView.Adapter mAdapter;
     private LinearLayoutManager mLayoutManager;
     private ArrayList<UsersAnnotations> list;
+    public static boolean bottom=false;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -62,7 +62,10 @@ public class AnnoucmentFragment extends Fragment  {
                             int totalItemCount = mLayoutManager.getItemCount();
                             int pastItemCount = mLayoutManager.findFirstVisibleItemPosition();
                             if (visibleItemCount + pastItemCount >= totalItemCount){
-                                FirebaseManager.GettingData(list,mAdapter);
+                                if(!bottom) {
+                                    bottom=true;
+                                    FirebaseManager.GettingData(list, mAdapter);
+                                }
                             }
 
                         }

@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import com.example.melikyan.charity.R;
 import com.example.melikyan.charity.RecyclerViewClickListener;
-import com.example.melikyan.charity.UsersAnnotations;
+import com.example.melikyan.charity.Data.UsersAnnotations;
 
 import java.util.ArrayList;
 

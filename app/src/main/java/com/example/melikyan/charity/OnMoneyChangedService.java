@@ -55,11 +55,11 @@ public class OnMoneyChangedService extends Service {
                 public void onChildChanged(DataSnapshot dataSnapshot, String s) {
                     Log.d("EASY",dataSnapshot.toString());
                     NotificationCompat.Builder builder=new NotificationCompat.Builder(getApplicationContext())
-                            .setSmallIcon(R.drawable.charity).setContentTitle("Charity").setContentText("Вам зачислено"+" "+
+                            .setSmallIcon(R.drawable.ic_logo_charity1).setContentTitle("Charity").setContentText("Вам зачислено"+" "+
                                     ((int)dataSnapshot.getValue()-moneyin));
                     Notification notification=builder.build();
                     NotificationManager notificationManager=(NotificationManager)getSystemService(NOTIFICATION_SERVICE);
-                    notificationManager.notify(0,notification);
+                    notificationManager.notify(1,notification);
                 }
 
                 @Override

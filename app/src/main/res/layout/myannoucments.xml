@@ -16,6 +16,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
     <TextView
+        android:gravity="center"
         android:id="@+id/noann"
         android:visibility="invisible"
         android:layout_width="match_parent"

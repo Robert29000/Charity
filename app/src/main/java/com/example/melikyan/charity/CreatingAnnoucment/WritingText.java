@@ -13,7 +13,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 
-import com.example.melikyan.charity.AnnotationInfo;
+import com.example.melikyan.charity.Data.CreatingAnnInfo;
 import com.example.melikyan.charity.R;
 
 import static com.example.melikyan.charity.R.id.toolbar;
@@ -44,7 +44,7 @@ public class WritingText extends AppCompatActivity {
                 if(ed.getText().toString().equals("")){
                     new Toast(this).makeText(this,"Напишите краткое описание",Toast.LENGTH_LONG).show();
                 }else {
-                    AnnotationInfo.anottext = ed.getText().toString();
+                    CreatingAnnInfo.anottext = ed.getText().toString();
                     Intent intent = new Intent(this, FinishAnnoucment.class);
                     startActivity(intent);
                     return true;

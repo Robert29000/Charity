@@ -13,6 +13,9 @@ import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -20,7 +23,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.example.melikyan.charity.AnnotationInfo;
+import com.example.melikyan.charity.Data.CreatingAnnInfo;
 import com.example.melikyan.charity.BitmapHelper;
 import com.example.melikyan.charity.R;
 
@@ -80,7 +83,7 @@ public class AddingAnnoucment extends AppCompatActivity implements View.OnLongCl
         }
         ImageView image=(ImageView)view;
         if(image.getBackground()!=null) {
-            final String[] actions = {"Снять фото", "Выбрать фото из галлереи", "Снять видео"};
+            final String[] actions = {"Снять фото", "Выбрать фото из галлереи"};
             AlertDialog.Builder dialog = new AlertDialog.Builder(this);
             dialog.setTitle("Выберите действие");
             dialog.setItems(actions, new DialogInterface.OnClickListener() {
@@ -159,7 +162,7 @@ public class AddingAnnoucment extends AppCompatActivity implements View.OnLongCl
         } catch (IOException e) {
                 e.printStackTrace();
         }
-        hasDrawable=true;
+        hasDrawable[chooseView]=true;
     }
     private File createFile() throws IOException{
         String fileName="photo_"+System.currentTimeMillis();
@@ -181,48 +184,61 @@ public class AddingAnnoucment extends AppCompatActivity implements View.OnLongCl
         startActivityForResult(photoPickerIntent, REQUEST_GET_FROM_GALLERY);
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_application, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
 
-    public void Continue(View view) {
-        for(int i=0;i<3;i++){
-            ImageView image;
-            switch(i){
-                case 0:image=findViewById(R.id.imageView1);
-                        if(image.getBackground()==null)
-                            AnnotationInfo.bits.add(files[i]);
-                        else {
-                            File f=new File(paths[i]);
-                            boolean deleted=f.delete();
-                        }
-                        break;
-                case 1:image=findViewById(R.id.imageView2);
-                    if(image.getBackground()==null)
-                        AnnotationInfo.bits.add(files[i]);
-                    else {
-                        File f=new File(paths[i]);
-                        boolean deleted=f.delete();
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.next:
+                for(int i=0;i<3;i++){
+                    ImageView image;
+                    switch(i){
+                        case 0:image=findViewById(R.id.imageView1);
+                            if(image.getBackground()==null)
+                                CreatingAnnInfo.bits.add(files[i]);
+                            else {
+                                File f=new File(paths[i]);
+                                boolean deleted=f.delete();
+                            }
+                            break;
+                        case 1:image=findViewById(R.id.imageView2);
+                            if(image.getBackground()==null)
+                                CreatingAnnInfo.bits.add(files[i]);
+                            else {
+                                File f=new File(paths[i]);
+                                boolean deleted=f.delete();
+                            }
+                            break;
+                        case 2:image=findViewById(R.id.imageView3);
+                            if(image.getBackground()==null)
+                                CreatingAnnInfo.bits.add(files[i]);
+                            else {
+                                File f=new File(paths[i]);
+                                boolean deleted=f.delete();
+                            }
+                            break;
                     }
-                    break;
-                case 2:image=findViewById(R.id.imageView3);
-                    if(image.getBackground()==null)
-                        AnnotationInfo.bits.add(files[i]);
-                    else {
-                        File f=new File(paths[i]);
-                        boolean deleted=f.delete();
-                    }
-                    break;
-            }
-        }
-        EditText name=findViewById(R.id.invalidName);
-        EditText domain=findViewById(R.id.chooseDomain);
-        if(name.getText().toString().equals("") || domain.getText().toString().equals("")){
-            new Toast(this).makeText(this,"Заполните все поля",Toast.LENGTH_LONG).show();
-        }else {
-            Intent intent = new Intent(this, WritingText.class);
-            startActivity(intent);
+                }
+                EditText name=findViewById(R.id.invalidName);
+                EditText domain=findViewById(R.id.chooseDomain);
+                if(name.getText().toString().equals("") || domain.getText().toString().equals("")){
+                    new Toast(this).makeText(this,"Заполните все поля",Toast.LENGTH_LONG).show();
+                }else {
+                    Intent intent = new Intent(this, WritingText.class);
+                    startActivity(intent);
+                }
+                return true;
+            default:return super.onOptionsItemSelected(item);
         }
     }
 
-    private boolean hasDrawable;
+
+    private boolean[] hasDrawable=new boolean[3];
     @Override
     public boolean onLongClick(View v) {
         final ImageView image=(ImageView)v;
@@ -237,8 +253,8 @@ public class AddingAnnoucment extends AppCompatActivity implements View.OnLongCl
                 chooseView = 2;
                 break;
         }
-        if(hasDrawable) {
-            final String[] actions = {"Переснять фото", "Выбрать другое фото", "Снять видео","Удалить фото"};
+        if(hasDrawable[chooseView]) {
+            final String[] actions = {"Переснять фото", "Выбрать другое фото","Удалить фото"};
             AlertDialog.Builder dialog = new AlertDialog.Builder(this);
             dialog.setTitle("Выберите действие");
             dialog.setItems(actions, new DialogInterface.OnClickListener() {
@@ -250,9 +266,10 @@ public class AddingAnnoucment extends AppCompatActivity implements View.OnLongCl
                             break;
                         case 1:
                             getPictureFromGallery();
-                        case 3:image.setImageBitmap(null);
-                               image.setBackground(getResources().getDrawable(R.drawable.choosephoto));
-                               hasDrawable=false;
+                        case 2:image.setImageBitmap(null);
+                               image.setBackground(getResources().getDrawable(R.drawable.image_border,null));
+                               image.setImageResource(R.drawable.ic_plus_svg);
+                               hasDrawable[chooseView]=false;
                             break;
                     }
                 }
@@ -268,7 +285,7 @@ public class AddingAnnoucment extends AppCompatActivity implements View.OnLongCl
         super.onPause();
         EditText nam=findViewById(R.id.invalidName);
         AutoCompleteTextView dom=findViewById(R.id.chooseDomain);
-        AnnotationInfo.name=nam.getText().toString();
-        AnnotationInfo.domain=dom.getText().toString();
+        CreatingAnnInfo.name=nam.getText().toString();
+        CreatingAnnInfo.domain=dom.getText().toString();
     }
 }

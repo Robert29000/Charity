@@ -12,7 +12,7 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.example.melikyan.charity.AnnotationInfo;
+import com.example.melikyan.charity.Data.CreatingAnnInfo;
 import com.example.melikyan.charity.MainApplication.ApplicationActivity;
 import com.example.melikyan.charity.OnMoneyChangedService;
 import com.example.melikyan.charity.R;
@@ -47,8 +47,8 @@ public class FinishAnnoucment extends AppCompatActivity {
         if(text.getText().toString().equals("") || wallet.getText().toString().equals("")){
             new Toast(this).makeText(this,"Введите необходимую сумму денег",Toast.LENGTH_LONG).show();
         }else {
-            AnnotationInfo.moneyneeded = Integer.parseInt(text.getText().toString());
-            AnnotationInfo.wallet= Integer.parseInt(wallet.getText().toString());
+            CreatingAnnInfo.moneyneeded = Integer.parseInt(text.getText().toString());
+            CreatingAnnInfo.wallet= Long.parseLong(wallet.getText().toString());
             FirebaseAuth mAuth = FirebaseAuth.getInstance();
             final FirebaseUser user = mAuth.getCurrentUser();
             final DatabaseReference database = FirebaseDatabase.getInstance().getReference();
@@ -61,26 +61,26 @@ public class FinishAnnoucment extends AppCompatActivity {
                     long counter = (long) dataSnapshot.getValue();
                     final long numberofan = counter + 1;
                     database.child("Users").child(user.getUid()).child("numberOfAnnouc").setValue(numberofan);
-                    database.child("Annoucments").child(user.getUid()+"-"+numberofan).child("name").setValue(AnnotationInfo.name);
-                    database.child("Annoucments").child(user.getUid()+"-"+numberofan).child("domain").setValue(AnnotationInfo.domain);
-                    database.child("Annoucments").child(user.getUid()+"-"+numberofan).child("text").setValue(AnnotationInfo.anottext);
-                    database.child("Annoucments").child(user.getUid()+"-"+numberofan).child("moneyneeded").setValue(AnnotationInfo.moneyneeded);
+                    database.child("Annoucments").child(user.getUid()+"-"+numberofan).child("name").setValue(CreatingAnnInfo.name);
+                    database.child("Annoucments").child(user.getUid()+"-"+numberofan).child("domain").setValue(CreatingAnnInfo.domain);
+                    database.child("Annoucments").child(user.getUid()+"-"+numberofan).child("text").setValue(CreatingAnnInfo.anottext);
+                    database.child("Annoucments").child(user.getUid()+"-"+numberofan).child("moneyneeded").setValue(CreatingAnnInfo.moneyneeded);
                     database.child("Annoucments").child(user.getUid()+"-"+numberofan).child("moneyincome").setValue(0);
-                    database.child("Annoucments").child(user.getUid()+"-"+numberofan).child("imagescount").setValue(AnnotationInfo.bits.size());
-                    database.child("Annoucments").child(user.getUid()+"-"+numberofan).child("yandexwallet").setValue(AnnotationInfo.wallet);
+                    database.child("Annoucments").child(user.getUid()+"-"+numberofan).child("imagescount").setValue(CreatingAnnInfo.bits.size());
+                    database.child("Annoucments").child(user.getUid()+"-"+numberofan).child("yandexwallet").setValue(CreatingAnnInfo.wallet);
                     StorageReference anRef=imagesRef.child(user.getUid()+"-"+numberofan);
                     UploadTask task;
                     final ProgressBar bar=findViewById(R.id.progressbar);
                     bar.setVisibility(View.VISIBLE);
-                    bar.setMax(AnnotationInfo.bits.size());
-                    final int max=AnnotationInfo.bits.size()-1;
-                    if(AnnotationInfo.bits.size()==0){
+                    bar.setMax(CreatingAnnInfo.bits.size());
+                    final int max= CreatingAnnInfo.bits.size()-1;
+                    if(CreatingAnnInfo.bits.size()==0){
                         Intent intent = new Intent(FinishAnnoucment.this, ApplicationActivity.class);
                         startActivity(intent);
                     }else {
-                        for (int i = 0; i < AnnotationInfo.bits.size(); i++) {
+                        for (int i = 0; i < CreatingAnnInfo.bits.size(); i++) {
                             final int courent = i;
-                            Uri file = Uri.fromFile(AnnotationInfo.bits.get(i));
+                            Uri file = Uri.fromFile(CreatingAnnInfo.bits.get(i));
                             StorageReference filesRef = anRef.child("image" + "-" + i);
                             task = filesRef.putFile(file);
                             task.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -88,7 +88,7 @@ public class FinishAnnoucment extends AppCompatActivity {
                                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                                     bar.incrementProgressBy(1);
                                     if (courent == max) {
-                                        AnnotationInfo.bits.clear();
+                                        CreatingAnnInfo.bits.clear();
                                         Intent serviceIntent=new Intent(getApplicationContext(), OnMoneyChangedService.class);
                                         serviceIntent.putExtra("UID",user.getUid()+"-"+numberofan);
                                         startService(serviceIntent);

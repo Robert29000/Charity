@@ -16,10 +16,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.melikyan.charity.Adapters.ImageAdapter;
-import com.example.melikyan.charity.BitmapHelper;
-import com.example.melikyan.charity.StartActivities.MainActivity;
 import com.example.melikyan.charity.R;
-import com.example.melikyan.charity.UsersAnnotations;
+import com.example.melikyan.charity.Data.UsersAnnotations;
 import com.example.melikyan.charity.Web;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FileDownloadTask;
@@ -50,6 +48,7 @@ public class InformationOfAnnoucment extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_information_of_annoucment);
         users=getIntent().getParcelableExtra("VALUE");
+        Log.d("EASY", users.uid);
         bitmaps.add(BitmapFactory.decodeFile(users.bimapUri));
         ProgressBar bar=findViewById(R.id.progressbar);
         bar.setMax(users.moneyneeded);
@@ -75,7 +74,8 @@ public class InformationOfAnnoucment extends AppCompatActivity {
                     waitingBar.setVisibility(View.INVISIBLE);
                     break;
                 case 2:
-                    StorageReference ref = storage.child("images/"+users.uid + "/" + "image-1");
+                    StorageReference ref = storage.child("images/"+users.uid+ "/" + "image-1");
+                    Log.d("EASY",ref.toString());
                     final File localFile=File.createTempFile("Images"+System.currentTimeMillis(),".jpg");
                     ref.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
                         @Override
@@ -88,6 +88,7 @@ public class InformationOfAnnoucment extends AppCompatActivity {
                     });
                     break;
                 case 3:ref = storage.child("images/"+users.uid + "/" + "image-1");
+                    Log.d("EASY",ref.toString());
                     final File localfile=File.createTempFile("Images"+System.currentTimeMillis(),".jpg");
                     ref.getFile(localfile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
                         @Override
@@ -126,9 +127,10 @@ public class InformationOfAnnoucment extends AppCompatActivity {
                             try {
                                 ApiClient client = new DefaultApiClient.Builder().setClientId(client_id).create();
                                 InstanceId instanceId = client.execute(new InstanceId.Request(client_id));
-                                Log.d("EASY", instanceId.toString());
+                                Log.d("EASY",instanceId.toString());
                                 Map<String, String> map = new HashMap<>();
-                                map.put("to", users.wallet+"");
+                                Log.d("EASY",users.yandexwallet+"");
+                                map.put("to", users.yandexwallet+"");
                                 map.put("amount", text.getText().toString());
                                 RequestExternalPayment request = client.execute(RequestExternalPayment.Request.newInstance(instanceId.instanceId, "p2p",
                                         map));
@@ -139,12 +141,14 @@ public class InformationOfAnnoucment extends AppCompatActivity {
                                 Log.d("EASY", payment.toString());
                                 String post="";
                                 for(String key:payment.acsParams.keySet()){
-                                    post=post+key+"="+map.get(key)+"&";
+                                    post=post+key+"="+payment.acsParams.get(key)+"&";
                                 }
                                 post=post.substring(0, post.length()-1);
                                 Intent intent = new Intent(InformationOfAnnoucment.this, Web.class);
                                 intent.putExtra("URI",payment.acsUri);
                                 intent.putExtra("DATA",post);
+                                intent.putExtra("MONEY",users.moneyincome+Integer.parseInt(text.getText().toString()));
+                                intent.putExtra("USER",users);
                                 startActivity(intent);
                             }catch (Exception e){
                                 e.printStackTrace();

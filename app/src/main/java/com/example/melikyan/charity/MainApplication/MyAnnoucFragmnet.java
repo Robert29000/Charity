@@ -1,6 +1,5 @@
 package com.example.melikyan.charity.MainApplication;
 
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -8,7 +7,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,11 +14,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.melikyan.charity.Adapters.AnnoucAdapter;
-import com.example.melikyan.charity.BitmapHelper;
-import com.example.melikyan.charity.StartActivities.MainActivity;
 import com.example.melikyan.charity.R;
 import com.example.melikyan.charity.RecyclerViewClickListener;
-import com.example.melikyan.charity.UsersAnnotations;
+import com.example.melikyan.charity.Data.UsersAnnotations;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -107,7 +103,6 @@ public class MyAnnoucFragmnet extends Fragment implements SwipeRefreshLayout.OnR
                     bar.setVisibility(View.INVISIBLE);
                     mSwipeRefreshLayout.setRefreshing(false);
                     text.setVisibility(View.VISIBLE);
-
                 }
                 for(int i=0;i<myann.size();i++) {
                     final int counter=i;

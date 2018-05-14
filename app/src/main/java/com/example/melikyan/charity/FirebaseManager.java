@@ -6,6 +6,9 @@ import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
+import com.example.melikyan.charity.Data.UserInfo;
+import com.example.melikyan.charity.Data.UsersAnnotations;
+import com.example.melikyan.charity.MainApplication.AnnoucmentFragment;
 import com.example.melikyan.charity.MainApplication.ApplicationActivity;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -96,41 +99,43 @@ public class FirebaseManager {
 
     private static int allAnn;
     public static void GettingData(final ArrayList<UsersAnnotations> list, final RecyclerView.Adapter adapter){
-        final ArrayList<UsersAnnotations> annotations=new ArrayList<>();
-        final Query myRef= FirebaseDatabase.getInstance().getReference().child("Annoucments").limitToFirst(allAnn+5);
-        final StorageReference storage= FirebaseStorage.getInstance().getReference();
-        FirebaseAuth mAuth=FirebaseAuth.getInstance();
-        final FirebaseUser user=mAuth.getCurrentUser();
-        final ValueEventListener listener=new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                    int countAnn=0;
+            final ArrayList<UsersAnnotations> annotations = new ArrayList<>();
+            final Query myRef = FirebaseDatabase.getInstance().getReference().child("Annoucments").limitToFirst(allAnn + 5);
+            final StorageReference storage = FirebaseStorage.getInstance().getReference();
+            FirebaseAuth mAuth = FirebaseAuth.getInstance();
+            final FirebaseUser user = mAuth.getCurrentUser();
+            myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    myRef.removeEventListener(this);
+                    int countAnn = 1;
                     for (DataSnapshot postData : dataSnapshot.getChildren()) {
-                        String key=postData.getKey().substring(0,postData.getKey().lastIndexOf("-"));
+                        String key = postData.getKey().substring(0, postData.getKey().lastIndexOf("-"));
                         if (!key.equals(user.getUid())) {
-                            if(postData.getKey().equals(list.get(0).uid) || countAnn<=list.size()) {
-                                countAnn+=1;
-                            }else {
+                            if (postData.getKey().equals(list.get(0).uid) || countAnn <= list.size()) {
+                                countAnn += 1;
+                            } else {
                                 annotations.add(postData.getValue(UsersAnnotations.class));
                                 int counter = annotations.size();
                                 annotations.get(counter - 1).uid = postData.getKey();
+
                             }
                         }
                     }
-                    myRef.removeEventListener(this);
                     for (int i = 0; i < annotations.size(); i++) {
                         final int counter = i;
                         final StorageReference ref = storage.child("images/" + annotations.get(i).uid + "/" + "image-0");
                         try {
-                            final File localFile = File.createTempFile("Images"+System.currentTimeMillis(), ".jpg");
+                            final File localFile = File.createTempFile("Images" + System.currentTimeMillis(), ".jpg");
                             ref.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
                                 @Override
                                 public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
                                     annotations.get(counter).bimapUri = localFile.getAbsolutePath();
                                     if (counter == annotations.size() - 1) {
-                                        list.addAll(list.size()-1,annotations);
-                                        allAnn=list.size();
+                                        list.addAll(list.size() , annotations);
+                                        allAnn = list.size();
                                         adapter.notifyDataSetChanged();
+                                        AnnoucmentFragment.bottom=false;
                                     }
 
                                 }
@@ -139,14 +144,13 @@ public class FirebaseManager {
                             e.printStackTrace();
                         }
                     }
-            }
+                }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
 
-            }
-        };
-        myRef.addListenerForSingleValueEvent(listener);
+                }
+            });
     }
 
 

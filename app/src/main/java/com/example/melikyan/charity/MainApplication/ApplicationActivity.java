@@ -15,7 +15,7 @@ import android.widget.Button;
 
 import com.example.melikyan.charity.CreatingAnnoucment.AddingAnnoucment;
 import com.example.melikyan.charity.R;
-import com.example.melikyan.charity.UsersAnnotations;
+import com.example.melikyan.charity.Data.UsersAnnotations;
 
 
 import java.io.File;
@@ -32,7 +32,7 @@ public class ApplicationActivity extends AppCompatActivity implements View.OnCli
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_application);
-        if(savedInstanceState==null) {
+        if(savedInstanceState==null || getIntent()!=null) {
             users = getIntent().getParcelableArrayListExtra("ANNOUCMENTS");
         }else users=savedInstanceState.getParcelableArrayList("USERS");
         Toolbar mytoolbar=findViewById(toolbar);

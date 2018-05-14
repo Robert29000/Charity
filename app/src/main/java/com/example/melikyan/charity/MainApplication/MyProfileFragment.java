@@ -14,9 +14,9 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.example.melikyan.charity.FirebaseManager;
+import com.example.melikyan.charity.OnMoneyChangedService;
 import com.example.melikyan.charity.R;
 import com.example.melikyan.charity.StartActivities.LoginActivity;
-import com.example.melikyan.charity.UserInfo;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -52,6 +52,7 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener{
                 return true;
             case R.id.quit:
                 FirebaseAuth.getInstance().signOut();
+                getActivity().stopService(new Intent(getActivity(), OnMoneyChangedService.class));
                 Intent intent=new Intent(getContext(), LoginActivity.class);
                 startActivity(intent);
                 getActivity().finish();

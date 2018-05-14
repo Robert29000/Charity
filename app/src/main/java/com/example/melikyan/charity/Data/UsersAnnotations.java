@@ -1,7 +1,6 @@
-package com.example.melikyan.charity;
+package com.example.melikyan.charity.Data;
 
 
-import android.graphics.Bitmap;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -13,29 +12,31 @@ import com.google.firebase.database.IgnoreExtraProperties;
 @IgnoreExtraProperties
 public class UsersAnnotations implements Parcelable {
     public String domain,name,text,bimapUri;
-    public int moneyincome,moneyneeded,imagescount,wallet;
+    public int moneyincome,moneyneeded,imagescount;
+    public long yandexwallet;
     public String uid;
-    public UsersAnnotations(String domain,int moneyincome,int moneyneeded,String name,String text,int imagescount,int wallet){
+    public UsersAnnotations(String domain,int moneyincome,int moneyneeded,String name,String text,int imagescount,long yandexwallet){
         this.domain=domain;
         this.moneyincome=moneyincome;
         this.moneyneeded=moneyneeded;
         this.name=name;
         this.text=text;
         this.imagescount=imagescount;
-        this.wallet=wallet;
+        this.yandexwallet=yandexwallet;
     }
     UsersAnnotations(){
 
     }
 
     public UsersAnnotations(Parcel in){
+        uid=in.readString();
         domain=in.readString();
         name=in.readString();
         text=in.readString();
         moneyneeded=in.readInt();
         moneyincome=in.readInt();
         imagescount=in.readInt();
-        wallet=in.readInt();
+        yandexwallet=in.readLong();
         bimapUri=in.readString();
     }
 
@@ -46,13 +47,14 @@ public class UsersAnnotations implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(uid);
         dest.writeString(domain);
         dest.writeString(name);
         dest.writeString(text);
         dest.writeInt(moneyneeded);
         dest.writeInt(moneyincome);
         dest.writeInt(imagescount);
-        dest.writeInt(wallet);
+        dest.writeLong(yandexwallet);
         dest.writeString(bimapUri);
     }
 
