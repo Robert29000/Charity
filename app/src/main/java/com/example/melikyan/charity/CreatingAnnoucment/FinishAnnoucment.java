@@ -16,6 +16,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.melikyan.charity.Data.CreatingAnnInfo;
+import com.example.melikyan.charity.FirebaseManager;
 import com.example.melikyan.charity.MainApplication.ApplicationActivity;
 import com.example.melikyan.charity.OnMoneyChangedService;
 import com.example.melikyan.charity.R;
@@ -119,8 +120,7 @@ public class FinishAnnoucment extends AppCompatActivity {
                         bar.setMax(CreatingAnnInfo.bits.size());
                         final int max = CreatingAnnInfo.bits.size() - 1;
                         if (CreatingAnnInfo.bits.size() == 0) {
-                            Intent intent = new Intent(FinishAnnoucment.this, ApplicationActivity.class);
-                            startActivity(intent);
+                            FirebaseManager.GettingData(FinishAnnoucment.this,FinishAnnoucment.this);
                         } else {
                             for (int i = 0; i < CreatingAnnInfo.bits.size(); i++) {
                                 final int courent = i;
@@ -136,8 +136,7 @@ public class FinishAnnoucment extends AppCompatActivity {
                                             Intent serviceIntent = new Intent(getApplicationContext(), OnMoneyChangedService.class);
                                             serviceIntent.putExtra("UID", user.getUid() + "-" + numberofan);
                                             startService(serviceIntent);
-                                            Intent intent = new Intent(FinishAnnoucment.this, ApplicationActivity.class);
-                                            startActivity(intent);
+                                            FirebaseManager.GettingData(FinishAnnoucment.this,FinishAnnoucment.this);
                                         }
                                     }
                                 });

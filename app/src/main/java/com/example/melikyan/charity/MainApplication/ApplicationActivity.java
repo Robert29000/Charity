@@ -10,6 +10,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -21,6 +22,7 @@ import com.example.melikyan.charity.Data.UsersAnnotations;
 import java.io.File;
 import java.util.ArrayList;
 
+import static com.example.melikyan.charity.R.id.create_account_text;
 import static com.example.melikyan.charity.R.id.toolbar;
 
 public class ApplicationActivity extends AppCompatActivity implements View.OnClickListener {
@@ -28,13 +30,14 @@ public class ApplicationActivity extends AppCompatActivity implements View.OnCli
     private PagerAdapter pagerAdapter;
     private Button button;
     public  ArrayList<UsersAnnotations> users;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_application);
-        if(savedInstanceState==null || getIntent()!=null) {
+        if(getIntent()!=null) {
             users = getIntent().getParcelableArrayListExtra("ANNOUCMENTS");
-        }else users=savedInstanceState.getParcelableArrayList("USERS");
+        }
         Toolbar mytoolbar=findViewById(toolbar);
         setSupportActionBar(mytoolbar);
         pager=findViewById(R.id.pager);
@@ -109,8 +112,9 @@ public class ApplicationActivity extends AppCompatActivity implements View.OnCli
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        outState.putParcelableArrayList("USERS",users);
         super.onSaveInstanceState(outState);
+        Log.d("EASY","i put it");
+        outState.putParcelableArrayList("USERS",users);
     }
 
     @Override

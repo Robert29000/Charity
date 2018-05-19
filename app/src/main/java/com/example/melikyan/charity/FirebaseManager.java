@@ -72,7 +72,6 @@ public class FirebaseManager {
                                 public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
 
                                     annotations.get(counter).bimapUri = localFile.getAbsolutePath();
-
                                     if (counter == annotations.size() - 1) {
                                         Intent intent = new Intent(context, ApplicationActivity.class);
                                         intent.putParcelableArrayListExtra("ANNOUCMENTS",annotations);
