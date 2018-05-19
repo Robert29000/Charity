@@ -36,7 +36,7 @@ public class Web extends AppCompatActivity {
                         DatabaseReference database = FirebaseDatabase.getInstance().getReference();
                         database.child("Annoucments").child(user.uid).child("moneyincome").setValue(money);
                         user.moneyincome=money;
-                        onBackPressed();
+                        FirebaseManager.GettingData(Web.this,Web.this);
                     }
                 }
             }
