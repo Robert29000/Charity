@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 import android.support.v7.widget.Toolbar;
@@ -23,8 +24,7 @@ import com.google.firebase.storage.StorageReference;
 
 public class RegisterActivity extends AppCompatActivity {
     private DatabaseReference mDataBase;
-    private EditText name,lastname,age;
-    private AutoCompleteTextView region;
+    private EditText name,lastname;
     private FirebaseAuth mAuth;
     private StorageReference storage;
     @Override
@@ -33,26 +33,21 @@ public class RegisterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_register);
         Toolbar mytoolbar=findViewById(R.id.toolbar);
         setSupportActionBar(mytoolbar);
-        region=findViewById(R.id.Region);
-        String[] countries=getResources().getStringArray(R.array.countries_array);
-        ArrayAdapter<String> adapter=new ArrayAdapter<>(this,android.R.layout.simple_list_item_1,countries);
-        region.setAdapter(adapter);
+
     }
 
     public void CreateProfile(View view) {
-        EditText email=findViewById(R.id.mail);
-        EditText password=findViewById(R.id.Passwd);
+        final EditText email=findViewById(R.id.mail);
+        final EditText password=findViewById(R.id.Passwd);
         final String mail=email.getText().toString();
         String pass=password.getText().toString();
         name=findViewById(R.id.Name);
         lastname=findViewById(R.id.LastName);
-        age=findViewById(R.id.Age);
-        region=findViewById(R.id.Region);
+        final Button button =findViewById(R.id.button2);
         mAuth=FirebaseAuth.getInstance();
         if(mail.equals("") || pass.equals("") ||
                 name.getText().toString().equals("") ||
-                lastname.getText().toString().equals("") || age.getText().toString().equals("") ||
-                region.getText().toString().equals("")){
+                lastname.getText().toString().equals("")){
             new Toast(RegisterActivity.this).makeText(RegisterActivity.this,"Заполните все поля",Toast.LENGTH_LONG).show();
         }else{
             mAuth.createUserWithEmailAndPassword(mail, pass).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -64,9 +59,12 @@ public class RegisterActivity extends AppCompatActivity {
                         mDataBase.child("Users").child(user.getUid()).child("email").setValue(mail);
                         mDataBase.child("Users").child(user.getUid()).child("name").setValue(name.getText().toString());
                         mDataBase.child("Users").child(user.getUid()).child("lastname").setValue(lastname.getText().toString());
-                        mDataBase.child("Users").child(user.getUid()).child("region").setValue(region.getText().toString());
-                        mDataBase.child("Users").child(user.getUid()).child("age").setValue(Long.parseLong(age.getText().toString()));
                         mDataBase.child("Users").child(user.getUid()).child("numberOfAnnouc").setValue(0);
+                        email.setFocusable(false);
+                        password.setFocusable(false);
+                        name.setFocusable(false);
+                        lastname.setFocusable(false);
+                        button.setClickable(false);
                         FirebaseManager.GettingData(RegisterActivity.this,RegisterActivity.this);
                         FirebaseManager.GetUserInfo(user);
                     } else

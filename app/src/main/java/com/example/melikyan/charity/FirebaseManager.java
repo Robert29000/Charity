@@ -162,8 +162,6 @@ public class FirebaseManager {
                 for(DataSnapshot dataSnapshot1:dataSnapshot.getChildren()) {
                     Log.d("EASY",dataSnapshot1.getValue()+"");
                     switch (dataSnapshot1.getKey()){
-                        case "age": currentUserInfo.age=(Long)dataSnapshot1.getValue();
-                            break;
                         case "email":currentUserInfo.email=(String)dataSnapshot1.getValue();
                             break;
                         case "lastname":currentUserInfo.lastname=(String)dataSnapshot1.getValue();
@@ -171,8 +169,6 @@ public class FirebaseManager {
                         case "name":currentUserInfo.name=(String)dataSnapshot1.getValue();
                             break;
                         case "numberOfAnnouc":currentUserInfo.numberOfAnnouc=(long)dataSnapshot1.getValue();
-                            break;
-                        case "region":currentUserInfo.region=(String)dataSnapshot1.getValue();
                             break;
                     }
                 }

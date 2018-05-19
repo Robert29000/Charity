@@ -8,8 +8,7 @@
 
     <uses-feature
         android:name="android.hardware.camera"
-        android:required="false" />
-
+        android:required="true" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
@@ -21,7 +20,8 @@
         android:largeHeap="true"
         android:roundIcon="@drawable/ic_logo"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme.NoActionBar">
+        android:theme="@style/AppTheme.NoActionBar"
+        android:configChanges="keyboardHidden|orientation">
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="com.example.melikyan.charity.fileprovider"
@@ -34,26 +34,36 @@
 
         <service android:name=".OnMoneyChangedService" />
 
-        <activity android:name=".StartActivities.MainActivity">
+        <activity android:name=".StartActivities.MainActivity"
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".StartActivities.LoginActivity" />
-        <activity android:name=".StartActivities.RegisterActivity" />
+        <activity android:name=".StartActivities.LoginActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".StartActivities.RegisterActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".MainApplication.ApplicationActivity"
-            android:windowSoftInputMode="adjustPan" />
-        <activity android:name=".CreatingAnnoucment.AddingAnnoucment" />
-        <activity android:name=".CreatingAnnoucment.ShowFullSizeImage" />
+            android:windowSoftInputMode="adjustPan"
+            android:screenOrientation="portrait" />
+        <activity android:name=".CreatingAnnoucment.AddingAnnoucment"
+            android:screenOrientation="portrait" />
+        <activity android:name=".CreatingAnnoucment.ShowFullSizeImage"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".CreatingAnnoucment.WritingText"
-            android:windowSoftInputMode="adjustPan" />
-        <activity android:name=".CreatingAnnoucment.FinishAnnoucment" />
-        <activity android:name=".MainApplication.InformationOfAnnoucment" />
-        <activity android:name=".Web" />
+            android:windowSoftInputMode="adjustPan"
+            android:screenOrientation="portrait" />
+        <activity android:name=".CreatingAnnoucment.FinishAnnoucment"
+            android:screenOrientation="portrait" />
+        <activity android:name=".MainApplication.InformationOfAnnoucment"
+            android:screenOrientation="portrait" />
+        <activity android:name=".Web"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

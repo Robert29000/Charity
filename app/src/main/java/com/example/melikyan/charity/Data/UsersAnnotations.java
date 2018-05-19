@@ -11,12 +11,11 @@ import com.google.firebase.database.IgnoreExtraProperties;
  */
 @IgnoreExtraProperties
 public class UsersAnnotations implements Parcelable {
-    public String domain,name,text,bimapUri;
+    public String name,text,bimapUri;
     public int moneyincome,moneyneeded,imagescount;
     public long yandexwallet;
     public String uid;
-    public UsersAnnotations(String domain,int moneyincome,int moneyneeded,String name,String text,int imagescount,long yandexwallet){
-        this.domain=domain;
+    public UsersAnnotations(int moneyincome,int moneyneeded,String name,String text,int imagescount,long yandexwallet){
         this.moneyincome=moneyincome;
         this.moneyneeded=moneyneeded;
         this.name=name;
@@ -30,7 +29,6 @@ public class UsersAnnotations implements Parcelable {
 
     public UsersAnnotations(Parcel in){
         uid=in.readString();
-        domain=in.readString();
         name=in.readString();
         text=in.readString();
         moneyneeded=in.readInt();
@@ -48,7 +46,6 @@ public class UsersAnnotations implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(uid);
-        dest.writeString(domain);
         dest.writeString(name);
         dest.writeString(text);
         dest.writeInt(moneyneeded);

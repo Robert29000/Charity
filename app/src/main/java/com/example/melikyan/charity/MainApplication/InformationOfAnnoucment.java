@@ -2,6 +2,7 @@ package com.example.melikyan.charity.MainApplication;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v7.app.AlertDialog;
@@ -126,17 +127,25 @@ public class InformationOfAnnoucment extends AppCompatActivity {
                         public void run() {
                             try {
                                 ApiClient client = new DefaultApiClient.Builder().setClientId(client_id).create();
-                                InstanceId instanceId = client.execute(new InstanceId.Request(client_id));
-                                Log.d("EASY",instanceId.toString());
+                                SharedPreferences preferences=getPreferences(MODE_PRIVATE);
+                                String instance_id=preferences.getString("ID"," ");
+                                if(instance_id.equals(" ")) {
+                                    InstanceId instanceId = client.execute(new InstanceId.Request(client_id));
+                                    SharedPreferences.Editor editor=preferences.edit();
+                                    editor.putString("ID",instanceId.instanceId);
+                                    editor.apply();
+                                    instance_id=instanceId.instanceId;
+                                    Log.d("EASY", instanceId.toString());
+                                }
                                 Map<String, String> map = new HashMap<>();
                                 Log.d("EASY",users.yandexwallet+"");
                                 map.put("to", users.yandexwallet+"");
                                 map.put("amount", text.getText().toString());
-                                RequestExternalPayment request = client.execute(RequestExternalPayment.Request.newInstance(instanceId.instanceId, "p2p",
+                                RequestExternalPayment request = client.execute(RequestExternalPayment.Request.newInstance(instance_id, "p2p",
                                         map));
                                 Log.d("EASY", request.toString());
                                 ProcessExternalPayment payment = client.execute(new ProcessExternalPayment.Request(
-                                        instanceId.instanceId, request.requestId, "https://money.yandex.ru",
+                                        instance_id, request.requestId, "https://money.yandex.ru",
                                         "https://money.yandex.ru",true));
                                 Log.d("EASY", payment.toString());
                                 String post="";

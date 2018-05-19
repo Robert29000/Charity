@@ -38,16 +38,16 @@
             <android.support.design.widget.TabItem
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="All"
+                android:text="@string/All"
                 />
         <android.support.design.widget.TabItem
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="MY"/>
+            android:text="@string/Mine"/>
         <android.support.design.widget.TabItem
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Profile"/>
+            android:text="@string/Profile"/>
         </android.support.design.widget.TabLayout>
     </android.support.design.widget.AppBarLayout>
 

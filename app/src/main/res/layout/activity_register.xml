@@ -39,26 +39,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/Name" />
 
-    <EditText
-        android:id="@+id/Age"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:ems="10"
-        android:inputType="number"
-        android:hint="@string/EnterAge"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Region" />
-
-    <AutoCompleteTextView
-        android:id="@+id/Region"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:hint="@string/EnterRegion"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/LastName" />
-
     <Button
         android:onClick="CreateProfile"
         android:id="@+id/button2"
@@ -83,7 +63,7 @@
         android:hint="@string/EnterPassword"
         android:inputType="textPassword"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Age" />
+        app:layout_constraintTop_toBottomOf="@+id/LastName" />
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"

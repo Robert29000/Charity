@@ -1,20 +1,7 @@
 <resources>
     <string name="app_name">Charity</string>
     <string name="desc">picture</string>
-    <string-array name="countries_array">
-        <item>Россия</item>
-        <item>Армения</item>
-        <item>Украина</item>
-        <item>Беларуссия</item>
-        <item>Казахстан</item>
-        <item>Грузия</item>
-        <item>Узбекистан</item>
-    </string-array>
-    <string-array name="domains">
-        <item>Здравохранение</item>
-        <item>Компания</item>
-        <item>Социальная акция</item>
-    </string-array>
+
 
 
     <string name="title_activity_setting">SettingActivity</string>
@@ -64,4 +51,7 @@
     <string name="NotAddAnnouc">Вы еще не добавили объявлений</string>
     <string name="NoAnnouc">Пока нет объявлений</string>
     <string name="AnnoChange">Изменить</string>
+    <string name="All">Все</string>
+    <string name="Mine">Мои</string>
+    <string name="Profile">Профиль</string>
 </resources>

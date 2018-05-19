@@ -5,8 +5,11 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.melikyan.charity.FirebaseManager;
@@ -22,6 +25,7 @@ import static com.example.melikyan.charity.R.id.toolbar;
 public class LoginActivity extends AppCompatActivity {
     protected static FirebaseAuth mAuth;
     private StorageReference storage;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,8 +36,10 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void Enter(View view) {
-        EditText email=findViewById(R.id.eMail);
-        EditText password=findViewById(R.id.passWord);
+        final EditText email=findViewById(R.id.eMail);
+        final EditText password=findViewById(R.id.passWord);
+        final Button login=findViewById(R.id.Enter);
+        final Button reg=findViewById(R.id.CreateProf);
         String emailtext=email.getText().toString();
         String passtext=password.getText().toString();
         if(emailtext.equals("") || passtext.equals(""))
@@ -43,6 +49,10 @@ public class LoginActivity extends AppCompatActivity {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if(task.isSuccessful()){
+                        email.setFocusable(false);
+                        password.setFocusable(false);
+                        login.setClickable(false);
+                        reg.setClickable(false);
                         FirebaseManager.GettingData(LoginActivity.this,LoginActivity.this);
                         FirebaseManager.GetUserInfo(mAuth.getCurrentUser());
                     }else new Toast(LoginActivity.this).makeText(LoginActivity.this,"Неверный логин или пароль",Toast.LENGTH_SHORT).show();

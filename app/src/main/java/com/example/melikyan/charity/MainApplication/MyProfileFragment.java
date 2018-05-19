@@ -27,7 +27,7 @@ import com.google.firebase.database.FirebaseDatabase;
  */
 
 public class MyProfileFragment extends Fragment implements View.OnClickListener{
-    private EditText myInitials,myAge,myRegion;
+    private EditText myInitials;
     private Button button;
     private DatabaseReference mDataBase;
     @Override
@@ -46,8 +46,6 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener{
         switch (item.getItemId()) {
             case R.id.change:
                 myInitials.setEnabled(true);
-                myAge.setEnabled(true);
-                myRegion.setEnabled(true);
                 button.setVisibility(View.VISIBLE);
                 return true;
             case R.id.quit:
@@ -68,18 +66,7 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener{
         button=view.findViewById(R.id.save);
         myInitials=view.findViewById(R.id.initials);
         myInitials.setText(FirebaseManager.currentUserInfo.name+" "+FirebaseManager.currentUserInfo.lastname);
-        myAge=view.findViewById(R.id.myage);
-        long myage=FirebaseManager.currentUserInfo.age;
         button.setOnClickListener(this);
-        if(myage>9 && myage<21){
-            myAge.setText(myage+" "+"лет");
-        }else if(myage/10 <5){
-            myAge.setText(myage+" "+"года");
-        }else{
-            myAge.setText(myage+" "+"лет");
-        }
-        myRegion=view.findViewById(R.id.myregion);
-        myRegion.setText(FirebaseManager.currentUserInfo.region);
         return view;
     }
 
@@ -88,14 +75,9 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener{
         FirebaseUser user= FirebaseAuth.getInstance().getCurrentUser();
         mDataBase= FirebaseDatabase.getInstance().getReference();
         String in=myInitials.getText().toString();
-        String age=myAge.getText().toString().substring(0,myAge.getText().toString().lastIndexOf(" "));
         mDataBase.child("Users").child(user.getUid()).child("name").setValue(in.substring(0,in.lastIndexOf(" ")));
         mDataBase.child("Users").child(user.getUid()).child("lastname").setValue(in.substring(in.lastIndexOf(" "),in.length()));
-        mDataBase.child("Users").child(user.getUid()).child("region").setValue(myRegion.getText().toString());
-        mDataBase.child("Users").child(user.getUid()).child("age").setValue(Integer.parseInt(age));
         myInitials.setEnabled(false);
-        myAge.setEnabled(false);
-        myRegion.setEnabled(false);
         button.setVisibility(View.INVISIBLE);
     }
 
@@ -103,18 +85,7 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener{
     public void onPause() {
         super.onPause();
         myInitials.setEnabled(false);
-        myAge.setEnabled(false);
-        myRegion.setEnabled(false);
         button.setVisibility(View.INVISIBLE);
         myInitials.setText(FirebaseManager.currentUserInfo.name+" "+FirebaseManager.currentUserInfo.lastname);
-        long myage=FirebaseManager.currentUserInfo.age;
-        if(myage>9 && myage<21){
-            myAge.setText(myage+" "+"лет");
-        }else if(myage/10 <5){
-            myAge.setText(myage+" "+"года");
-        }else{
-            myAge.setText(myage+" "+"лет");
-        }
-        myRegion.setText(FirebaseManager.currentUserInfo.region);
     }
 }

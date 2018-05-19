@@ -3,12 +3,16 @@ package com.example.melikyan.charity.CreatingAnnoucment;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
+import android.os.Handler;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -25,16 +29,17 @@ import android.widget.Toast;
 
 import com.example.melikyan.charity.Data.CreatingAnnInfo;
 import com.example.melikyan.charity.BitmapHelper;
+import com.example.melikyan.charity.Manifest;
 import com.example.melikyan.charity.R;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import static android.os.Build.VERSION_CODES.M;
 import static com.example.melikyan.charity.R.id.toolbar;
 
 public class AddingAnnoucment extends AppCompatActivity implements View.OnLongClickListener {
-    private AutoCompleteTextView domain;
     private File[] files;
     private String[] paths;
     @Override
@@ -43,10 +48,6 @@ public class AddingAnnoucment extends AppCompatActivity implements View.OnLongCl
         setContentView(R.layout.activity_adding_annoucment);
         Toolbar mytoolbar=findViewById(toolbar);
         setSupportActionBar(mytoolbar);
-        String[] domains=getResources().getStringArray(R.array.domains);
-        ArrayAdapter<String> adapter=new ArrayAdapter<>(this,android.R.layout.simple_list_item_1,domains);
-        domain=findViewById(R.id.chooseDomain);
-        domain.setAdapter(adapter);
         files=new File[3];
         paths=new String[3];
         for(int i=0;i<files.length;i++){
@@ -66,8 +67,8 @@ public class AddingAnnoucment extends AppCompatActivity implements View.OnLongCl
     }
 
     private static final int REQUEST_TAKE_PHOTO = 1;
-     private static final int REQUEST_GET_FROM_GALLERY=2;
-
+    private static final int REQUEST_GET_FROM_GALLERY=2;
+    private static final int REQUEST_PERMISSION=10;
 
     public void InsertImage(View view) {
         switch (view.getId()) {
@@ -173,10 +174,16 @@ public class AddingAnnoucment extends AppCompatActivity implements View.OnLongCl
 
 
     private void MakePicture(){
-        Intent intent=new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        Uri photoUri= FileProvider.getUriForFile(this,"com.example.melikyan.charity.fileprovider",files[chooseView]);
-        intent.putExtra(MediaStore.EXTRA_OUTPUT,photoUri);
-        startActivityForResult(intent,REQUEST_TAKE_PHOTO);
+        if(Build.VERSION.SDK_INT>=M) {
+            if (checkSelfPermission(android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(new String[]{android.Manifest.permission.CAMERA}, REQUEST_PERMISSION);
+            }
+        }else {
+            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            Uri photoUri = FileProvider.getUriForFile(this, "com.example.melikyan.charity.fileprovider", files[chooseView]);
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
+            startActivityForResult(intent, REQUEST_TAKE_PHOTO);
+        }
     }
     private void getPictureFromGallery(){
         Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
@@ -225,8 +232,7 @@ public class AddingAnnoucment extends AppCompatActivity implements View.OnLongCl
                     }
                 }
                 EditText name=findViewById(R.id.invalidName);
-                EditText domain=findViewById(R.id.chooseDomain);
-                if(name.getText().toString().equals("") || domain.getText().toString().equals("")){
+                if(name.getText().toString().equals("")){
                     new Toast(this).makeText(this,"Заполните все поля",Toast.LENGTH_LONG).show();
                 }else {
                     Intent intent = new Intent(this, WritingText.class);
@@ -284,8 +290,20 @@ public class AddingAnnoucment extends AppCompatActivity implements View.OnLongCl
     protected void onPause() {
         super.onPause();
         EditText nam=findViewById(R.id.invalidName);
-        AutoCompleteTextView dom=findViewById(R.id.chooseDomain);
         CreatingAnnInfo.name=nam.getText().toString();
-        CreatingAnnInfo.domain=dom.getText().toString();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if(requestCode==REQUEST_PERMISSION){
+            if(grantResults[0]==PackageManager.PERMISSION_GRANTED){
+                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                Uri photoUri = FileProvider.getUriForFile(this, "com.example.melikyan.charity.fileprovider", files[chooseView]);
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
+                startActivityForResult(intent, REQUEST_TAKE_PHOTO);
+            }else{
+
+            }
+        }
     }
 }
