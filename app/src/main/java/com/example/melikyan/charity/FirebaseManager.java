@@ -62,7 +62,9 @@ public class FirebaseManager {
                         context.startActivity(intent);
                         activity.finish();
                     }
-                    final Counter cnt=new Counter(0);
+
+                    final int[] res=new int[1];
+                    res[0]=0;
                     for (int i = 0; i < annotations.size(); i++) {
                         final int counter = i;
                         final StorageReference ref = storage.child("images/" + annotations.get(i).uid + "/" + "image-0");
@@ -72,14 +74,14 @@ public class FirebaseManager {
                                 @Override
                                 public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
                                     annotations.get(counter).bimapUri = localFile.getAbsolutePath();
-                                    Log.d("EASY",cnt.count+"");
-                                    if (cnt.count == annotations.size() - 1) {
+
+                                    if (res[0] == annotations.size() - 1) {
                                         Intent intent = new Intent(context, ApplicationActivity.class);
                                         intent.putParcelableArrayListExtra("ANNOUCMENTS",annotations);
                                         context.startActivity(intent);
                                         activity.finish();
                                     }
-                                    cnt.count+=1;
+                                    res[0]+=1;
                                 }
                             });
                         } catch (IOException e) {
@@ -122,7 +124,8 @@ public class FirebaseManager {
                             }
                         }
                     }
-                    final Counter helper=new Counter(0);
+                    final int[] res=new int[1];
+                    res[0]=0;
                     for (int i = 0; i < annotations.size(); i++) {
                         final int counter = i;
                         final StorageReference ref = storage.child("images/" + annotations.get(i).uid + "/" + "image-0");
@@ -132,13 +135,13 @@ public class FirebaseManager {
                                 @Override
                                 public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
                                     annotations.get(counter).bimapUri = localFile.getAbsolutePath();
-                                    if (helper.count == annotations.size() - 1) {
+                                    if (res[0] == annotations.size() - 1) {
                                         list.addAll(list.size() , annotations);
                                         allAnn = list.size();
                                         adapter.notifyDataSetChanged();
                                         AnnoucmentFragment.bottom=false;
                                     }
-                                    helper.count+=1;
+                                   res[0]+=1;
                                 }
                             });
                         } catch (IOException e) {
@@ -184,10 +187,5 @@ public class FirebaseManager {
         storage.addListenerForSingleValueEvent(listener);
     }
 
-    public static class Counter{
-        public int count;
-        public Counter(int a){
-            this.count=a;
-        }
-    }
+
 }

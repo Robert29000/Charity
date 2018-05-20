@@ -105,7 +105,8 @@ public class MyAnnoucFragmnet extends Fragment implements SwipeRefreshLayout.OnR
                     mSwipeRefreshLayout.setRefreshing(false);
                     text.setVisibility(View.VISIBLE);
                 }
-                final FirebaseManager.Counter helper=new FirebaseManager.Counter(0);
+                final int[] res=new int[1];
+                res[0]=0;
                 for(int i=0;i<myann.size();i++) {
                     final int counter=i;
                     StorageReference ref=storage.child("images/" + myann.get(i).uid+ "/" + "image-0");
@@ -115,13 +116,13 @@ public class MyAnnoucFragmnet extends Fragment implements SwipeRefreshLayout.OnR
                             @Override
                             public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
                                 myann.get(counter).bimapUri= localFile.getAbsolutePath();
-                                if(helper.count ==myann.size()-1){
+                                if(res[0] ==myann.size()-1){
                                     bar.setVisibility(View.INVISIBLE);
                                     mSwipeRefreshLayout.setRefreshing(false);
                                     mAdapter.notifyDataSetChanged();
                                     text.setVisibility(View.INVISIBLE);
                                 }
-                                helper.count+=1;
+                                res[0]+=1;
                             }
                         });
                     }catch (IOException e){
@@ -140,8 +141,8 @@ public class MyAnnoucFragmnet extends Fragment implements SwipeRefreshLayout.OnR
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        outState.putParcelableArrayList("MYANN",myann);
         super.onSaveInstanceState(outState);
+        outState.putParcelableArrayList("MYANN",myann);
     }
 
     @Override
