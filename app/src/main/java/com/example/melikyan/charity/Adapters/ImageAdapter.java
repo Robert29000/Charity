@@ -1,6 +1,7 @@
 package com.example.melikyan.charity.Adapters;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,7 +17,7 @@ import java.util.ArrayList;
  */
 
 public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> {
-    ArrayList<Bitmap> bits;
+    ArrayList<String> bits;
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
         public ImageView image;
@@ -25,7 +26,7 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
             image=itemView.findViewById(R.id.images);
         }
     }
-    public ImageAdapter(ArrayList<Bitmap> bits){
+    public ImageAdapter(ArrayList<String> bits){
         this.bits=bits;
     }
 
@@ -36,7 +37,8 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.image.setImageBitmap(bits.get(position));
+        Bitmap bitmap= BitmapFactory.decodeFile(bits.get(position));
+        holder.image.setImageBitmap(bitmap);
     }
 
     @Override

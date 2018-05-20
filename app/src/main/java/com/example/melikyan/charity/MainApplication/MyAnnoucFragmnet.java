@@ -18,6 +18,7 @@ import com.example.melikyan.charity.FirebaseManager;
 import com.example.melikyan.charity.R;
 import com.example.melikyan.charity.RecyclerViewClickListener;
 import com.example.melikyan.charity.Data.UsersAnnotations;
+import com.example.melikyan.charity.ValContainer;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -105,8 +106,7 @@ public class MyAnnoucFragmnet extends Fragment implements SwipeRefreshLayout.OnR
                     mSwipeRefreshLayout.setRefreshing(false);
                     text.setVisibility(View.VISIBLE);
                 }
-                final int[] res=new int[1];
-                res[0]=0;
+                final ValContainer<Integer> res=new ValContainer<>(0);
                 for(int i=0;i<myann.size();i++) {
                     final int counter=i;
                     StorageReference ref=storage.child("images/" + myann.get(i).uid+ "/" + "image-0");
@@ -116,13 +116,13 @@ public class MyAnnoucFragmnet extends Fragment implements SwipeRefreshLayout.OnR
                             @Override
                             public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
                                 myann.get(counter).bimapUri= localFile.getAbsolutePath();
-                                if(res[0] ==myann.size()-1){
+                                if(res.getValue() ==myann.size()-1){
                                     bar.setVisibility(View.INVISIBLE);
                                     mSwipeRefreshLayout.setRefreshing(false);
                                     mAdapter.notifyDataSetChanged();
                                     text.setVisibility(View.INVISIBLE);
                                 }
-                                res[0]+=1;
+                                res.setValue(res.getValue()+1);
                             }
                         });
                     }catch (IOException e){

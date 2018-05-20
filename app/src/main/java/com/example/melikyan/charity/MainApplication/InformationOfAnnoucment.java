@@ -19,6 +19,7 @@ import android.widget.TextView;
 import com.example.melikyan.charity.Adapters.ImageAdapter;
 import com.example.melikyan.charity.R;
 import com.example.melikyan.charity.Data.UsersAnnotations;
+import com.example.melikyan.charity.ValContainer;
 import com.example.melikyan.charity.Web;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FileDownloadTask;
@@ -41,7 +42,7 @@ public class InformationOfAnnoucment extends AppCompatActivity {
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private final String client_id="F1C0CD270B37CA6AC828AA46D98648A5493CD63F99BF0AA0C9CAEC8641A8474C";
-    final private ArrayList<Bitmap> bitmaps=new ArrayList<>();
+    final private ArrayList<String> bitmaps=new ArrayList<>();
     UsersAnnotations users;
 
     @Override
@@ -50,7 +51,7 @@ public class InformationOfAnnoucment extends AppCompatActivity {
         setContentView(R.layout.activity_information_of_annoucment);
         users=getIntent().getParcelableExtra("VALUE");
         Log.d("EASY", users.uid);
-        bitmaps.add(BitmapFactory.decodeFile(users.bimapUri));
+        bitmaps.add(users.bimapUri);
         ProgressBar bar=findViewById(R.id.progressbar);
         bar.setMax(users.moneyneeded);
         bar.setProgress(users.moneyincome);
@@ -66,52 +67,37 @@ public class InformationOfAnnoucment extends AppCompatActivity {
         final ProgressBar waitingBar=findViewById(R.id.waitingbar);
         waitingBar.setVisibility(View.VISIBLE);
         Log.d("EASY",users.imagescount+"");
-        final StorageReference storage=FirebaseStorage.getInstance().getReference();
-        try {
-            switch (users.imagescount) {
-                case 1:
-                    mAdapter = new ImageAdapter(bitmaps);
-                    mRecyclerView.setAdapter(mAdapter);
-                    waitingBar.setVisibility(View.INVISIBLE);
-                    break;
-                case 2:
-                    StorageReference ref = storage.child("images/"+users.uid+ "/" + "image-1");
-                    Log.d("EASY",ref.toString());
-                    final File localFile=File.createTempFile("Images"+System.currentTimeMillis(),".jpg");
+        if(users.imagescount==1){
+            mAdapter = new ImageAdapter(bitmaps);
+            mRecyclerView.setAdapter(mAdapter);
+            waitingBar.setVisibility(View.INVISIBLE);
+        }else {
+            final StorageReference storage=FirebaseStorage.getInstance().getReference();
+            final ValContainer<Integer> res = new ValContainer<>(1);
+            for (int i = 1; i < users.imagescount; i++) {
+                StorageReference ref = storage.child("images/" + users.uid + "/" + "image-" + i);
+                final File localFile;
+                try {
+                    localFile = File.createTempFile("Images" + System.currentTimeMillis(), ".jpg");
                     ref.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                            bitmaps.add(BitmapFactory.decodeFile(localFile.getAbsolutePath()));
-                            mAdapter = new ImageAdapter(bitmaps);
-                            mRecyclerView.setAdapter(mAdapter);
-                            waitingBar.setVisibility(View.INVISIBLE);
+                            bitmaps.add(localFile.getAbsolutePath());
+                            if (res.getValue() == bitmaps.size() - 1) {
+                                mAdapter = new ImageAdapter(bitmaps);
+                                mRecyclerView.setAdapter(mAdapter);
+                                waitingBar.setVisibility(View.INVISIBLE);
+                            }
+                            res.setValue(res.getValue() + 1);
                         }
-                    });
-                    break;
-                case 3:ref = storage.child("images/"+users.uid + "/" + "image-1");
-                    Log.d("EASY",ref.toString());
-                    final File localfile=File.createTempFile("Images"+System.currentTimeMillis(),".jpg");
-                    ref.getFile(localfile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                            bitmaps.add(BitmapFactory.decodeFile(localfile.getAbsolutePath()));
-                        }
-                    });
-                    ref = storage.child("images/"+users.uid + "/" + "image-2");
-                    ref.getFile(localfile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                            bitmaps.add(BitmapFactory.decodeFile(localfile.getAbsolutePath()));
-                            mAdapter = new ImageAdapter(bitmaps);
-                            mRecyclerView.setAdapter(mAdapter);
-                            waitingBar.setVisibility(View.INVISIBLE);
-                        }
-                    });
-                    break;
-            }
-        }catch (IOException e){
 
+                    });
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
+
     }
 
     public void Donate(View view) {
